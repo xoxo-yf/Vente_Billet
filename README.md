@@ -2,7 +2,7 @@ install  nest
 - npm install -g @nestjs/cli
 
 creer fichier nest
-- nest new simplerestapi
+- nest new plateforme
 
 choix de package manager
 npm
