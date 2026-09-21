@@ -63,10 +63,13 @@ if (formLogin) {
             }
 
             // Enregistre le jeton JWT de l'examen dans le navigateur
-            localStorage.setItem('jeton_acces', donnees.access_token);
-            alert('Connexion réussie ! Jeton JWT enregistré.');
-            
-            // code pour rediriger vers la page des événements.....
+          if (donnees.access_token) {
+    localStorage.setItem('jeton_acces', donnees.access_token);
+} else if (donnees.jeton_acces) {
+    // Sécurité si votre code renvoie la version française
+    localStorage.setItem('jeton_acces', donnees.jeton_acces);
+}
+            window.location.href = 'catalogue.html';
             
         } catch (error) {
             errDiv.innerText = error.message;

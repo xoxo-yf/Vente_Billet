@@ -11,6 +11,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'node:path';
+import { EventsModule } from './events/events.module.js';
+import { TicketsModule } from './tickets/tickets.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -25,6 +27,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     // 2. Vos modules
     AuthModule,
     UsersModule,
+    EventsModule,
+    TicketsModule,
 
     // 3. Module d'observation tiers
     ObserveModule.forRoot({
@@ -55,6 +59,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       rootPath: join(process.cwd(), 'public'),
       exclude: ['/api/(*.)'], // Empêche de bloquer vos futures routes d'API
     }),
+        
+    TicketsModule,
 
 
   ],

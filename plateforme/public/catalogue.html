@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue des Événements - Billetterie</title>
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap');
+
+:root { --ink: #1c2733; --ink-soft: #55616f; --ink-faint: #8a94a1; --paper: #eff2f5; --surface: #ffffff; --line: #dbe1e8; --accent: #0f4c5c; --accent-dark: #0a3642; --accent-tint: #e4eef1; --focus: #2b7fff; --radius: 10px; --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif; }
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; background-color: var(--paper); color: var(--ink); margin: 0; padding: 32px 24px 56px; }
+
+/* En-tête */
+.header { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 1080px; margin: 0 auto 20px; padding: 18px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+h1 { margin: 0; font-family: var(--font-title); font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.btn-add { display: inline-block; background-color: var(--accent); color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background-color .15s ease; }
+.btn-add:hover { background-color: var(--accent-dark); }
+
+/* Barre de recherche (Exigence examen) */
+.search-box { display: flex; gap: 16px; align-items: flex-end; max-width: 1080px; margin: 0 auto 32px; padding: 20px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.search-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.search-group label { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
+.search-box input { padding: 10px 12px; border: 1px solid #c3ccd6; border-radius: 6px; font: inherit; color: var(--ink); background: #fff; }
+.search-box input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.btn-search { background-color: var(--accent); color: #fff; border: none; padding: 11px 24px; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .15s ease; }
+.btn-search:hover { background-color: var(--accent-dark); }
+
+/* Grille des événements */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; max-width: 1080px; margin: 0 auto; }
+.card { display: flex; flex-direction: column; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 22px; }
+.card:hover { border-color: #b7c3cf; border-left-color: var(--accent); }
+.card h3 { margin: 0 0 8px; font-family: var(--font-title); font-size: 19px; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.card p { margin: 4px 0; color: var(--ink-soft); font-size: 14px; }
+.card .meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 14px; }
+.card .price { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Achat */
+.buy-section { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed #c3ccd6; }
+.buy-section input { width: 64px; padding: 9px 8px; border: 1px solid #c3ccd6; border-radius: 6px; text-align: center; font: inherit; }
+.buy-section input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.btn-buy { flex: 1; background-color: var(--accent); color: #fff; border: none; padding: 9px 14px; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .15s ease; }
+.btn-buy:hover { background-color: var(--accent-dark); }
+.btn-buy:disabled { background-color: #d5dbe2; color: #8a94a1; cursor: not-allowed; }
+
+/* Aucun résultat */
+.no-result { grid-column: 1 / -1; text-align: center; color: var(--ink-soft); padding: 48px 24px; background: var(--surface); border: 1px dashed #c3ccd6; border-radius: var(--radius); }
+
+/* Accessibilité */
+a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Mobile */
+@media (max-width: 640px) {
+    body { padding: 16px 12px 40px; }
+    .header { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
+    .search-box { flex-direction: column; align-items: stretch; padding: 16px 20px; }
+    .btn-search { width: 100%; }
+}
+    </style>
+</head>
+<body>
+
+   <div class="header">
+    <!-- Ajout de l'élément id="user-name" pour afficher le nom dynamiquement -->
+    <h1>Catalogue de <span id="user-name" style="color: #6f42c1;">Chargement...</span></h1>
+    <div>
+        <a href="historique.html" class="btn-nav" style="background-color: #007bff; text-decoration: none; padding: 10px 15px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; margin-right: 10px;"> Mon Historique</a>
+
+    </div>
+</div>
+
+
+    <!-- Formulaire de recherche filtrée -->
+    <form class="search-box" id="search-form">
+        <div class="search-group">
+            <label>Filtrer par Ville</label>
+            <input type="text" id="search-ville" placeholder="ex: Paris">
+        </div>
+        <div class="search-group">
+            <label>Filtrer par Date</label>
+            <input type="date" id="search-date">
+        </div>
+        <button type="submit" class="btn-search">Rechercher</button>
+    </form>
+
+    <!-- Liste des cartes injectée dynamiquement -->
+    <div class="grid" id="events-grid"></div>
+
+    <script>
+        const GRID = document.getElementById('events-grid');
+
+        // 1. Fonction pour charger et afficher les événements (avec ou sans filtres)
+        async function chargerEvenements(ville = '', date = '') {
+            GRID.innerHTML = '<p class="no-result">Chargement des événements...</p>';
+            
+            let url = 'http://localhost:3000/api/events';
+            // Si des filtres sont saisis, on utilise la route de recherche de votre contrôleur
+            if (ville || date) {
+                url += `/search?ville=${encodeURIComponent(ville)}&date=${encodeURIComponent(date)}`;
+            }
+
+            try {
+                const reponse = await fetch(url);
+                const evenements = await reponse.json();
+
+                if (!reponse.ok) throw new Error("Erreur lors de la récupération des données.");
+
+                GRID.innerHTML = '';
+                if (evenements.length === 0) {
+                    GRID.innerHTML = '<p class="no-result">Aucun événement ne correspond à vos critères de recherche.</p>';
+                    return;
+                }
+
+                evenements.forEach(event => {
+                    const dateFormatee = new Date(event.date).toLocaleDateString('fr-FR', {
+                        day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    const estComplet = event.placesDisponibles <= 0;
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div>
+                            <h3>${event.titre}</h3>
+                            <p>${event.description}</p>
+                            <div class="meta">
+                                📍 <strong>${event.nomLieu}</strong> (${event.ville})<br>
+                                📅 ${dateFormatee}
+                            </div>
+                        </div>
+                        <div>
+                            <p>🎟️ Places restantes : <strong>${estComplet ? 'COMPLET' : event.placesDisponibles}</strong> / ${event.placesTotales}</p>
+                            <div class="price">${event.prix.toFixed(2)} €</div>
+                            <div class="buy-section">
+                                <input type="number" id="qty-${event.id}" value="1" min="1" max="${event.placesDisponibles}" ${estComplet ? 'disabled' : ''}>
+                                <button class="btn-buy" onclick="acheterBillet(${event.id})" ${estComplet ? 'disabled' : ''}>
+                                    ${estComplet ? 'Épuisé' : 'Réserver'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    GRID.appendChild(card);
+                });
+            } catch (error) {
+                GRID.innerHTML = `<p class="no-result" style="color:red;">${error.message}</p>`;
+            }
+        }
+
+        // 2. Gestionnaire de recherche dynamique
+        document.getElementById('search-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const ville = document.getElementById('search-ville').value;
+            const date = document.getElementById('search-date').value; // Retourne AAAA-MM-JJ
+            chargerEvenements(ville, date);
+        });
+
+        // 3. Logique d'achat avec transmission sécurisée du JWT (Règle métier examen)
+      async function acheterBillet(eventId) {
+    const quantite = parseInt(document.getElementById(`qty-${eventId}`).value);
+    const token = localStorage.getItem('jeton_acces'); 
+
+    if (!token) {
+        alert("Authentification requise. Veuillez vous connecter pour acheter un billet.");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const reponse = await fetch('http://localhost:3000/api/tickets/achat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Espace crucial après Bearer
+            },
+            body: JSON.stringify({ eventId: parseInt(eventId), quantite: parseInt(quantite) }) // Force le type entier pour le DTO NestJS
+        });
+
+        const resultat = await reponse.json();
+
+        if (!reponse.ok) {
+            // Affiche l'erreur exacte du ValidationPipe ou du Guard dans votre console (F12)
+            console.error("Détails de l'erreur NestJS:", resultat);
+            throw new Error(result.message || "La transaction a échoué.");
+        }
+
+        alert(`🎉 Achat réussi ! Total : ${resultat.montantTotal.toFixed(2)} € pour ${quantite} billet(s).`);
+        
+        const ville = document.getElementById('search-ville').value;
+        const date = document.getElementById('search-date').value;
+        chargerEvenements(ville, date);
+
+    } catch (error) {
+        alert(`❌ Erreur d'achat : ${error.message}`);
+    }
+}
+
+        // Chargement initial au démarrage de la page
+        chargerEvenements();
+        // Fonction utilitaire pour décoder un jeton JWT sans librairie externe
+        function decoderJWT(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Récupération et affichage du nom de l'utilisateur connecté
+        const tokenSession = localStorage.getItem('jeton_acces');
+        if (tokenSession) {
+            const donneesUtilisateur = decoderJWT(tokenSession);
+            // Option A : Si vous avez inclus le nom dans le JWT (recommandé)
+            if (donneesUtilisateur && donneesUtilisateur.nom) {
+                document.getElementById('user-name').innerText = donneesUtilisateur.nom;
+            } else if (donneesUtilisateur && donneesUtilisateur.email) {
+                // Option B : Repli sur l'email si le nom n'est pas dans la charge utile du JWT
+                document.getElementById('user-name').innerText = donneesUtilisateur.email.split('@')[0];
+            }
+        } else {
+            document.getElementById('user-name').innerText = "Visiteur";
+        }
+
+    </script>
+</body>
+</html>

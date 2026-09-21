@@ -3,7 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Billet } from '../../tickets/entities/billet.entity.js';
+import { Achat } from '../../tickets/entities/achat.entity.js';
+
 
 @Entity('users')
 export class User {
@@ -21,4 +26,6 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date;
+
+
 }

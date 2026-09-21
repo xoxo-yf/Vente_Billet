@@ -9,7 +9,11 @@ async function bootstrap() {
   });
 
   // Permet à votre future interface (Frontend) de communiquer avec l'API sans blocage CORS
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // Active la validation des formulaires avec des messages d'erreur clairs en français
   app.useGlobalPipes(new ValidationPipe({
@@ -17,7 +21,7 @@ async function bootstrap() {
     transform: true,
   }));
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3000,'0.0.0.0');
   console.log(`🚀 L'API est lancée avec succès sur : http://localhost:3000`);
 }
 bootstrap();

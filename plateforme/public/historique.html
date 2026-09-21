@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Historique de Billets - Billetterie</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 30px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        h1 { margin: 0; color: #2c3e50; font-size: 24px; }
+        .btn-nav { background-color: #6f42c1; color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block; }
+        .btn-nav:hover { background-color: #59339d; }
+        
+        /* Structure du tableau d'historique */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        th, td { padding: 15px 20px; text-align: left; }
+        th { background-color: #6f42c1; color: white; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+        tr { border-bottom: 1px solid #e2e8f0; }
+        tr:last-child { border-bottom: none; }
+        tr:hover { background-color: #f8fafc; }
+        
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .badge-success { background-color: #d1e7dd; color: #0f5132; }
+        
+        .no-data { text-align: center; color: #888; padding: 40px; background: white; border-radius: 10px; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>📜 Mon Historique d'Achats</h1>
+            <div>
+                <a href="catalogue.html" class="btn-nav">↩️ Retour au Catalogue</a>
+            </div>
+        </div>
+
+        <!-- Zone d'affichage des billets -->
+        <div id="historique-zone">
+            <p class="no-data">Chargement de votre historique...</p>
+        </div>
+    </div>
+
+    <script>
+        async function chargerHistorique() {
+            const zone = document.getElementById('historique-zone');
+            const token = localStorage.getItem('jeton_acces'); // Récupère le jeton JWT du login
+
+            if (!token) {
+                zone.innerHTML = '<p class="no-data" style="color: red;">🔒 Authentification requise. Redirection...</p>';
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                return;
+            }
+
+            try {
+                // Interrogation de l'API protégée par le JwtAuthGuard
+                const reponse = await fetch('http://localhost:3000/api/tickets/historique', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Transmission du jeton dans le header
+                    }
+                });
+
+                if (!reponse.ok) throw new Error("Impossible de charger l'historique.");
+
+                const billets = await reponse.json();
+
+                if (billets.length === 0) {
+                    zone.innerHTML = '<p class="no-data">🎟️ Vous n\'avez pas encore acheté de billets sur la plateforme.</p>';
+                    return;
+                }
+
+                // Construction dynamique du tableau HTML
+                let htmlTable = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Billet</th>
+                                <th>Événement</th>
+                                <th>Lieu / Ville</th>
+                                <th>Date d'Achat</th>
+                                <th>Prix</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                billets.forEach(billet => {
+                    const dateAchat = new Date(billet.dateReservation).toLocaleDateString('fr-FR', {
+                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    htmlTable += `
+                        <tr>
+                            <td><strong>#${billet.id}</strong></td>
+                            <td>${billet.event.titre}</td>
+                            <td>📍 ${billet.event.nomLieu} (${billet.event.ville})</td>
+                            <td>📅 ${dateAchat}</td>
+                            <td style="font-weight: bold; color: #28a745;">${billet.prix.toFixed(2)} €</td>
+                            <td><span class="badge badge-success">${billet.statut}</span></td>
+                        </tr>
+                    `;
+                });
+
+                htmlTable += '</tbody></table>';
+                zone.innerHTML = htmlTable;
+
+            } catch (error) {
+                zone.innerHTML = `<p class="no-data" style="color: red;">❌ Erreur : ${error.message}</p>`;
+            }
+        }
+
+        // Lance le chargement au démarrage de la page
+        chargerHistorique();
+    </script>
+</body>
+</html>
