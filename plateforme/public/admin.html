@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Admin - Validation Mobile Money</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f4c5c;
+            --primary-dark: #0a3540;
+            --primary-light: #e8f2f4;
+            --accent: #1789a8;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --success-text: #14532d;
+            --warning-bg: #fef3c7;
+            --warning-text: #78350f;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --danger-text: #7f1d1d;
+            --border: #e2e8f0;
+            --text-main: #1a2430;
+            --text-muted: #64748b;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 32px 24px 60px;
+            color: var(--text-main);
+        }
+
+        .container { max-width: 1180px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 26px 32px;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(15, 76, 92, 0.25);
+        }
+
+        .header-title { display: flex; align-items: center; gap: 14px; }
+
+        .header-icon {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+        }
+
+        h1 { margin: 0; font-size: 20px; color: #fff; font-weight: 700; letter-spacing: -0.01em; }
+        .header-sub { margin: 2px 0 0; font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 500; }
+
+        .header a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(255,255,255,0.12);
+            padding: 10px 18px;
+            border-radius: 8px;
+            transition: background 0.15s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header a:hover { background: rgba(255,255,255,0.22); }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 22px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+        .stat-value { font-size: 26px; font-weight: 800; color: var(--text-main); }
+        .stat-value.wait { color: #b45309; }
+        .stat-value.ok { color: var(--success); }
+        .stat-value.ko { color: var(--danger); }
+
+        .table-wrap {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th, td { padding: 16px 20px; text-align: left; font-size: 14px; }
+
+        th {
+            background-color: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11.5px;
+            letter-spacing: 0.04em;
+        }
+
+        tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s ease; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background-color: #f8fafc; }
+
+        .id-cell { color: var(--accent); font-weight: 700; }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .badge-wait { background-color: var(--warning-bg); color: var(--warning-text); }
+        .badge-success { background-color: var(--success-bg); color: var(--success-text); }
+        .badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+
+        .ref-code {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            background: #eef2f7;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 9px 16px;
+            border-radius: 7px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12.5px;
+            margin-right: 8px;
+            transition: transform 0.1s ease, box-shadow 0.15s ease;
+        }
+        .btn-action:hover { transform: translateY(-1px); }
+        .btn-accept { background-color: var(--success); color: white; box-shadow: 0 2px 6px rgba(22,163,74,0.3); }
+        .btn-accept:hover { box-shadow: 0 3px 10px rgba(22,163,74,0.4); }
+        .btn-reject { background-color: var(--danger); color: white; box-shadow: 0 2px 6px rgba(220,38,38,0.3); }
+        .btn-reject:hover { box-shadow: 0 3px 10px rgba(220,38,38,0.4); }
+
+        .no-action { color: #94a3b8; font-style: italic; font-size: 13px; }
+
+        .empty-state, .loading-state, .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 14px;
+        }
+        .loading-state { color: var(--text-muted); }
+        .empty-state { color: #94a3b8; }
+        .error-state { color: var(--danger); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                
+                <div>
+                    <h1>Panneau de Contrôle Organisateur</h1>
+                    <p class="header-sub">Vérification des paiements Mobile Money</p>
+                </div>
+            </div>
+ <!-- À insérer dans le bloc <div class="header"> de vos 3 pages -->
+<div style="display:flex; align-items:center; gap:10px;">
+    <a href="creer-evenement.html" style="text-decoration:none; color:#fff; font-weight:600; font-size:14px; background:rgba(255,255,255,0.12); padding:10px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); transition:background 0.15s ease;"
+       onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+         Créer un événement
+    </a>
+
+    <button id="btn-logout" style="display:flex; align-items:center; gap:6px; background-color:#17625a; color:#fff; border:1px solid rgba(255,255,255,0.25); font-weight:700; font-size:13.5px; padding:10px 16px; border-radius:8px; cursor:pointer; box-shadow:0 2px 6px rgba(220,38,38,0.35); transition:transform 0.1s ease, box-shadow 0.15s ease;"
+            onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 3px 10px rgba(220,38,38,0.45)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(220,38,38,0.35)'">
+        Déconnexion
+    </button>
+</div>
+
+        </div>
+
+        <div class="stats-bar" id="stats-bar" style="display:none;">
+            <div class="stat-card">
+                <div class="stat-label">En attente</div>
+                <div class="stat-value wait" id="stat-wait">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Validés</div>
+                <div class="stat-value ok" id="stat-ok">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Refusés</div>
+                <div class="stat-value ko" id="stat-ko">0</div>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <div id="admin-zone">
+                <p class="loading-state">Chargement des achats...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function chargerAchats() {
+            const zone = document.getElementById('admin-zone');
+            const statsBar = document.getElementById('stats-bar');
+            try {
+                const reponse = await fetch('http://localhost:3000/api/tickets/admin/liste');
+                const achats = await reponse.json();
+
+                if (achats.length === 0) {
+                    statsBar.style.display = 'none';
+                    zone.innerHTML = '<p class="empty-state">Aucun achat enregistré sur la plateforme.</p>';
+                    return;
+                }
+
+                let nbWait = 0, nbOk = 0, nbKo = 0;
+
+                let htmlTable = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Prix Unitaire</th>
+                                <th>Événement</th>
+                                <th>Places</th>
+                                <th>Montant</th>
+                                <th>Référence Mobile Money</th>
+                                <th>Statut de Validation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                achats.forEach(achat => {
+                    const premierBillet = achat.billets && achat.billets[0];
+                    const titreEvenement = premierBillet ? premierBillet.event.titre : 'Événement inconnu';
+                    const reference = premierBillet && premierBillet.modePaiement ? premierBillet.modePaiement : 'Non renseignée';
+                    const statutCourant = premierBillet ? premierBillet.statut : 'en_attente';
+                    const prixUnitaire = premierBillet ? premierBillet.prix : 0;
+                    let badgeClass = 'badge-wait';
+                    let labelStatut = 'En attente de vérification';
+                    if (statutCourant === 'paye') { badgeClass = 'badge-success'; labelStatut = 'Validé (Payé)'; nbOk++; }
+                    else if (statutCourant === 'refuse') { badgeClass = 'badge-danger'; labelStatut = 'Refusé / Annulé'; nbKo++; }
+                    else { nbWait++; }
+
+                    const boutonsVisibles = statutCourant === 'en_attente'
+                        ? `<button class="btn-action btn-accept" onclick="modifierStatut(${achat.id}, 'valider', '${reference.replace(/'/g, "\\'")}')">Accepter</button>
+                           <button class="btn-action btn-reject" onclick="modifierStatut(${achat.id}, 'refuser')">Refuser</button>`
+                        : `<span class="no-action">Aucune action requise</span>`;
+
+                    htmlTable += `
+                        <tr>
+                            <td class="id-cell">${prixUnitaire.toFixed(2)}</td>
+                            <td><strong>${titreEvenement}</strong></td>
+                            <td>${achat.billets.length} billet(s)</td>
+                            <td style="font-weight:700;">${achat.montantTotal.toFixed(2)} Ar</td>
+                            <td><span class="ref-code">${reference}</span></td>
+                            <td><span class="badge ${badgeClass}">${labelStatut}</span></td>
+                            <td>${boutonsVisibles}</td>
+                        </tr>
+                    `;
+                });
+
+                htmlTable += '</tbody></table>';
+                zone.innerHTML = htmlTable;
+
+                document.getElementById('stat-wait').textContent = nbWait;
+                document.getElementById('stat-ok').textContent = nbOk;
+                document.getElementById('stat-ko').textContent = nbKo;
+                statsBar.style.display = 'grid';
+
+            } catch (error) {
+                statsBar.style.display = 'none';
+                zone.innerHTML = `<p class="error-state">Erreur : ${error.message}</p>`;
+            }
+        }
+
+        async function modifierStatut(achatId, action, referenceText = '') {
+            const url = action === 'valider' ? 'http://localhost:3000/api/tickets/payer' : 'http://localhost:3000/api/tickets/refuser';
+            const bodyData = action === 'valider'
+                ? { achatId: achatId, modePaiement: referenceText }
+                : { achatId: achatId };
+
+            try {
+                const reponse = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+
+                if (!reponse.ok) throw new Error("Le changement de statut a échoué.");
+
+                alert(`🎯 Achat #${achatId} mis à jour avec succès !`);
+                chargerAchats();
+            } catch (error) {
+                alert(`❌ Erreur : ${error.message}`);
+            }
+        }
+
+        chargerAchats();
+        
+        // Écouteur sur le bouton de déconnexion
+document.getElementById('btn-logout').addEventListener('click', () => {
+    // 1. Supprime le jeton JWT de la mémoire du navigateur
+    localStorage.removeItem('jeton_acces');
+    
+    // 2. Message d'information optionnel
+    alert("👋 Déconnexion réussie. À bientôt !");
+    
+    // 3. Redirection immédiate vers la page de connexion
+    window.location.href = 'index.html';
+});
+
+    </script>
+</body>
+</html>

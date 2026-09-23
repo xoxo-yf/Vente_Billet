@@ -1,81 +1,126 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Billet } from './entities/billet.entity.js';
 import { Achat } from './entities/achat.entity.js';
 import { Event } from '../events/entities/event.entity.js';
-import { CreateTicketDto } from './dto/create-ticket.dto.js';
 
 @Injectable()
 export class TicketsService {
   constructor(
-    private dataSource: DataSource,
-    @InjectRepository(Billet) private billetRepo: Repository<Billet>,
-    @InjectRepository(Achat) private achatRepo: Repository<Achat>,
+    @InjectRepository(Billet) private readonly billetRepo: Repository<Billet>,
+    @InjectRepository(Achat) private readonly achatRepo: Repository<Achat>,
+    @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
   ) {}
 
-  async acheterBillets(userId: number, dto: CreateTicketDto): Promise<Achat> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
+  // CORRIGÉ : Ajout du paramètre optionnel modePaiement pour intercepter la référence dès le début
+  async acheterBillets(userId: number, eventId: number, quantite: number, modePaiement?: string): Promise<Achat> {
+    const event = await this.eventRepo.findOneBy({ id: eventId });
+    if (!event) throw new NotFoundException("L'événement demandé n'existe pas.");
 
-    try {
-      // 1. Recherche de l'événement avec verrou de sécurité (Pessimistic Write)
-      const event = await queryRunner.manager.findOne(Event, {
-        where: { id: dto.eventId },
-        lock: { mode: 'pessimistic_write' }
-      });
-
-      if (!event) throw new NotFoundException("L'événement demandé n'existe pas.");
-      
-      // Vérification critique du stock disponible
-      if (event.placesDisponibles < dto.quantite) {
-        throw new BadRequestException(`Places insuffisantes. Il ne reste que ${event.placesDisponibles} places.`);
-      }
-
-      // 2. REGLE METIER EXIGEE : Décrémentation du stock
-      event.placesDisponibles -= dto.quantite;
-      await queryRunner.manager.save(event);
-
-      // 3. Enregistrement de la facture globale d'Achat (Liaison ID sécurisée sans crash)
-      const montantTotal = event.prix * dto.quantite;
-      const nouvelAchat = queryRunner.manager.create(Achat, {
-        montantTotal,
-        user: { id: userId }, // Jointure directe simplifiée par ID pour casser la dépendance circulaire
-        billets: []
-      });
-      const achatSauvegarde = await queryRunner.manager.save(nouvelAchat);
-
-      // 4. Génération des billets unitaires
-      const billets: Billet[] = [];
-      for (let i = 0; i < dto.quantite; i++) {
-        const billet = queryRunner.manager.create(Billet, {
-          prix: event.prix,
-          event,
-          user: { id: userId }, // Jointure directe par ID
-          achat: achatSauvegarde
-        });
-        billets.push(billet);
-      }
-      await queryRunner.manager.save(Billet, billets);
-
-      await queryRunner.commitTransaction();
-      achatSauvegarde.billets = billets;
-      return achatSauvegarde;
-
-    } catch (err) {
-      await queryRunner.rollbackTransaction();
-      throw err;
-    } finally {
-      await queryRunner.release();
+    if (event.placesDisponibles < quantite) {
+      throw new BadRequestException(`Places insuffisantes. Il ne reste que ${event.placesDisponibles} places.`);
     }
+
+    // Décrémentation immédiate du stock pour bloquer les places réservées
+    event.placesDisponibles -= quantite;
+    await this.eventRepo.save(event);
+
+    const montantTotal = event.prix * quantite;
+    const nouvelAchat = this.achatRepo.create({
+      montantTotal,
+      user: { id: userId },
+      billets: []
+    });
+    const achatSauvegarde = await this.achatRepo.save(nouvelAchat);
+
+    const billets: Billet[] = [];
+    for (let i = 0; i < quantite; i++) {
+      const billet = this.billetRepo.create({
+        prix: event.prix,
+        event,
+        user: { id: userId },
+        achat: achatSauvegarde,
+        statut: 'en_attente', // Strictement bloqué 'en_attente' au départ !
+        modePaiement: modePaiement || 'mobile_money_en_attente' // Stocke la référence (ex: Réf: TXN1234)
+      });
+      billets.push(billet);
+    }
+    await this.billetRepo.save(billets);
+
+    achatSauvegarde.billets = billets;
+    return achatSauvegarde;
   }
 
-  // Fonctionnalité clé : Historique des billets par utilisateur
+  // Action Admin 1 : Accepter le paiement et valider définitivement les tickets
+  async payerReservation(achatId: number, modePaiement: string): Promise<Achat> {
+    const achat = await this.achatRepo.findOneBy({ id: achatId });
+    if (!achat) throw new NotFoundException("Réservation introuvable.");
+
+    // Passage des billets de cet achat au statut 'paye'
+    await this.billetRepo.update(
+      { achat: { id: achatId } }, 
+      { statut: 'paye', modePaiement: modePaiement } 
+    );
+
+    achat.billets = await this.billetRepo.find({
+      where: { achat: { id: achatId } }
+    });
+
+    console.log(`[Admin] Réservation #${achatId} acceptée et validée.`);
+    return achat;
+  }
+
+  // Action Admin 2 : Refuser le paiement et libérer automatiquement les places
+  async refuserReservation(achatId: number): Promise<Achat> {
+    const achat = await this.achatRepo.findOne({
+      where: { id: achatId },
+      relations: { billets: { event: true } }
+    });
+    if (!achat) throw new NotFoundException("Réservation introuvable.");
+
+    // Mettre à jour les billets au statut 'refuse'
+    await this.billetRepo.update(
+      { achat: { id: achatId } },
+      { statut: 'refuse' }
+    );
+
+    // RÈGLE MÉTIER CRITIQUE : Rendre les places au stock de l'événement
+    if (achat.billets && achat.billets.length > 0) {
+      const eventId = achat.billets[0].event.id;
+      const quantite = achat.billets.length;
+      
+      const event = await this.eventRepo.findOneBy({ id: eventId });
+      if (event) {
+        event.placesDisponibles += quantite; 
+        await this.eventRepo.save(event);
+      }
+    }
+
+    achat.billets = await this.billetRepo.find({ where: { achat: { id: achatId } } });
+    return achat;
+  }
+
+  // Historique de l'utilisateur connecté
+// À remplacer dans src/tickets/tickets.service.ts :
   async obtenirHistorique(userId: number): Promise<Billet[]> {
     return this.billetRepo.find({
       where: { user: { id: userId } },
+      // CRUCIAL : Force TypeORM à charger l'achat et l'événement pour éviter l'erreur 'undefined'
+      relations: { 
+        achat: true, 
+        event: true 
+      },
       order: { dateReservation: 'DESC' }
+    });
+  }
+
+
+  // Outil Admin : Voir toutes les réservations du site
+  async obtenirToutesLesReservations(): Promise<Achat[]> {
+    return this.achatRepo.find({
+      relations: { billets: { event: true } },
+      order: { dateAchat: 'DESC' }
     });
   }
 }

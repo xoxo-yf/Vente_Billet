@@ -7,44 +7,191 @@
     <style>
        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap');
 
-:root { --ink: #1c2733; --ink-soft: #55616f; --ink-faint: #8a94a1; --paper: #eff2f5; --surface: #ffffff; --line: #dbe1e8; --accent: #0f4c5c; --accent-dark: #0a3642; --accent-tint: #e4eef1; --focus: #2b7fff; --radius: 10px; --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif; }
+       .main-footer {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    margin-top: 60px;
+    padding: 50px 20px 0;
+    text-align: center;
+    border-top: 4px solid #ff6b35;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.footer-text h3 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+}
+
+.footer-text p {
+    color: #cfd8e3;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 22px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+    transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+.contact-item:hover {
+    background: #ff6b35;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.contact-label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.contact-label small {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-bottom {
+    margin-top: 40px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.85rem;
+    color: #a9b4c2;
+}
+
+@media (max-width: 600px) {
+    .contact-item { width: 100%; justify-content: center; }
+}
+:root {
+    --ink: #e7edf1;
+    --ink-soft: #9fb0bd;
+    --ink-faint: #6d7f8c;
+    --paper: #0f171d;
+    --surface: #16212a;
+    --surface-alt: #1c2a34;
+    --line: #26343f;
+    --accent: #1789a8;
+    --accent-dark: #12657d;
+    --accent-tint: rgba(23, 137, 168, 0.16);
+    --lavender: #b79fd1;
+    --lavender-dark: #cdb9e3;
+    --lavender-tint: rgba(183, 159, 209, 0.14);
+    --rose: #e08b81;
+    --rose-dark: #f0a49b;
+    --rose-tint: rgba(224, 139, 129, 0.14);
+    --focus: #4fb8d6;
+    --radius: 16px;
+    --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+}
 *, *::before, *::after { box-sizing: border-box; }
-body { font-family: var(--font-sans); font-size: 15px; line-height: 1.5; background-color: var(--paper); color: var(--ink); margin: 0; padding: 32px 24px 56px; }
+body { font-family: var(--font-sans); font-size: 15px; line-height: 1.6; background-color: var(--paper); color: var(--ink); margin: 0; padding: 32px 24px 56px; }
 
 /* En-tête */
-.header { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 1080px; margin: 0 auto 20px; padding: 18px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-h1 { margin: 0; font-family: var(--font-title); font-size: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.btn-add { display: inline-block; background-color: var(--accent); color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background-color .15s ease; }
-.btn-add:hover { background-color: var(--accent-dark); }
+.header { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; max-width: 1080px; margin: 0 auto 20px; padding: 22px 30px; background: linear-gradient(135deg, var(--surface-alt) 0%, var(--paper) 100%); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 4px 18px rgba(19, 59, 111, 0.35); }
+h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+#user-name { color: var(--lavender-dark) !important; }
 
-/* Barre de recherche (Exigence examen) */
-.search-box { display: flex; gap: 16px; align-items: flex-end; max-width: 1080px; margin: 0 auto 32px; padding: 20px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-.search-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.header-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.btn-add { display: inline-block; background-color: var(--accent); color: #fff; padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background-color .2s ease, transform .15s ease; }
+.btn-add:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
+
+.btn-nav {
+    display: inline-flex; align-items: center; gap: 6px;
+    background-color: var(--lavender-tint);
+    color: var(--lavender-dark);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid rgba(183, 159, 209, 0.3);
+    transition: background-color .2s ease, transform .15s ease;
+}
+.btn-nav:hover { background-color: rgba(183, 159, 209, 0.24); transform: translateY(-1px); }
+
+.btn-logout {
+    display: inline-flex; align-items: center; gap: 6px;
+    background-color: var(--rose-tint);
+    color: var(--rose-dark);
+    padding: 10px 18px;
+    border: 1px solid rgba(224, 139, 129, 0.3);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color .2s ease, transform .15s ease;
+}
+.btn-logout:hover { background-color: rgba(224, 139, 129, 0.24); transform: translateY(-1px); }
+
+/* Barre de recherche */
+.search-box { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; max-width: 1080px; margin: 0 auto 32px; padding: 22px 30px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28); }
+.search-group { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 6px; }
 .search-group label { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
-.search-box input { padding: 10px 12px; border: 1px solid #c3ccd6; border-radius: 6px; font: inherit; color: var(--ink); background: #fff; }
+.search-box input { padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; font: inherit; color: var(--ink); background: var(--surface-alt); color-scheme: dark; }
 .search-box input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
-.btn-search { background-color: var(--accent); color: #fff; border: none; padding: 11px 24px; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .15s ease; }
-.btn-search:hover { background-color: var(--accent-dark); }
+.btn-search { background-color: var(--accent); color: #fff; border: none; padding: 11px 26px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .2s ease, transform .15s ease; }
+.btn-search:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
 
 /* Grille des événements */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; max-width: 1080px; margin: 0 auto; }
-.card { display: flex; flex-direction: column; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 22px; }
-.card:hover { border-color: #b7c3cf; border-left-color: var(--accent); }
-.card h3 { margin: 0 0 8px; font-family: var(--font-title); font-size: 19px; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.card { display: flex; flex-direction: column; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28); transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
+.card:hover { box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4); transform: translateY(-2px); border-color: rgba(23, 137, 168, 0.4); }
+.card h3 { margin: 0 0 8px; font-family: var(--font-title); font-size: 19px; font-weight: 600; line-height: 1.35; color: var(--ink); }
 .card p { margin: 4px 0; color: var(--ink-soft); font-size: 14px; }
-.card .meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 14px; }
-.card .price { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.card .meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 14px; line-height: 1.6; }
+.card .price { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: var(--accent-dark); font-variant-numeric: tabular-nums; }
 
 /* Achat */
-.buy-section { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed #c3ccd6; }
-.buy-section input { width: 64px; padding: 9px 8px; border: 1px solid #c3ccd6; border-radius: 6px; text-align: center; font: inherit; }
+.buy-section { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); }
+.buy-section input { width: 64px; padding: 9px 8px; border: 1px solid var(--line); border-radius: 10px; text-align: center; font: inherit; background: var(--surface-alt); color: var(--ink); color-scheme: dark; }
 .buy-section input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
-.btn-buy { flex: 1; background-color: var(--accent); color: #fff; border: none; padding: 9px 14px; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .15s ease; }
-.btn-buy:hover { background-color: var(--accent-dark); }
-.btn-buy:disabled { background-color: #d5dbe2; color: #8a94a1; cursor: not-allowed; }
+.btn-buy { flex: 1; background-color: var(--accent); color: #fff; border: none; padding: 10px 14px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .2s ease, transform .15s ease; }
+.btn-buy:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
+.btn-buy:disabled { background-color: #26343f; color: var(--ink-faint); cursor: not-allowed; transform: none; }
 
 /* Aucun résultat */
-.no-result { grid-column: 1 / -1; text-align: center; color: var(--ink-soft); padding: 48px 24px; background: var(--surface); border: 1px dashed #c3ccd6; border-radius: var(--radius); }
+.no-result { grid-column: 1 / -1; text-align: center; color: var(--ink-soft); padding: 48px 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); }
 
 /* Accessibilité */
 a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -53,23 +200,58 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
 /* Mobile */
 @media (max-width: 640px) {
     body { padding: 16px 12px 40px; }
-    .header { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
-    .search-box { flex-direction: column; align-items: stretch; padding: 16px 20px; }
+    .header { flex-direction: column; align-items: flex-start; padding: 18px 22px; }
+    .search-box { flex-direction: column; align-items: stretch; padding: 18px 22px; }
     .btn-search { width: 100%; }
 }
+
+/* Styles de la Modale */
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(4, 8, 12, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px; }
+.modal-backdrop.active { opacity: 1; pointer-events: auto; }
+.modal-content { background: var(--surface); padding: 34px; border-radius: 20px; max-width: 440px; width: 100%; border: 1px solid var(--line); text-align: center; transform: scale(0.96); transition: transform 0.25s ease; box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6); }
+.modal-backdrop.active .modal-content { transform: scale(1); }
+.modal-icon { font-size: 38px; margin-bottom: 14px; }
+.modal-content h2 { margin: 0 0 12px; font-family: var(--font-title); font-size: 22px; color: var(--ink); }
+.modal-content p { margin: 0 0 22px; color: var(--ink-soft); font-size: 15px; }
+.modal-actions { display: flex; gap: 12px; }
+.btn-primary { flex: 1; background-color: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .2s ease, transform .15s ease; }
+.btn-primary:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
+.btn-secondary { flex: 1; background-color: var(--surface-alt); color: var(--ink-soft); border: 1px solid var(--line); padding: 12px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .2s ease; }
+.btn-secondary:hover { background-color: var(--paper); color: var(--ink); }
+
     </style>
 </head>
 <body>
+    <!-- Modale de Confirmation - Mobile Money Uniquement -->
+<div id="confirmation-modal" class="modal-backdrop">
+    <div class="modal-content">
+        <div class="modal-icon">📲</div>
+        <h2>Confirmer l'achat</h2>
+        <p id="modal-body">Vous êtes sur le point d'acheter des places.</p>
 
-   <div class="header">
-    <!-- Ajout de l'élément id="user-name" pour afficher le nom dynamiquement -->
-    <h1>Catalogue de <span id="user-name" style="color: #6f42c1;">Chargement...</span></h1>
-    <div>
-        <a href="historique.html" class="btn-nav" style="background-color: #007bff; text-decoration: none; padding: 10px 15px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; margin-right: 10px;"> Mon Historique</a>
+        <!-- Instructions et Input pour Mobile Money fixes -->
+        <div id="zone-mobile-money" style="background-color: var(--accent-tint); color: #7fd3e8; padding: 16px; border-radius: 12px; font-size: 13px; text-align: left; margin-bottom: 20px; border: 1px solid var(--line);">
+            📌 <strong>Numéro de l'organisateur :</strong> <span style="font-weight: bold; font-size: 14px;">+261 34 00 000 00</span><br>
+            Veuillez effectuer le transfert (Mvola, Orange Money, Airtel Money) puis saisir la référence ci-dessous :
 
+            <label style="display: block; font-weight: bold; margin-top: 14px; margin-bottom: 6px; color: var(--ink);">Référence du transfert</label>
+            <input type="text" id="transfer-reference" placeholder="ex: TXN12345678" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-family: inherit; background: var(--surface-alt); color: var(--ink); color-scheme: dark;">
+        </div>
+
+        <div class="modal-actions">
+            <button id="modal-btn-cancel" class="btn-secondary">Annuler</button>
+            <button id="modal-btn-confirm" class="btn-primary">Confirmer l'achat</button>
+        </div>
     </div>
 </div>
 
+   <div class="header">
+    <h1>Catalogue de <span id="user-name">Chargement...</span></h1>
+    <div class="header-nav">
+        <a href="historique.html" class="btn-nav"> Mon Historique</a>
+        <button id="btn-logout" class="btn-logout"> Déconnexion</button>
+    </div>
+</div>
 
     <!-- Formulaire de recherche filtrée -->
     <form class="search-box" id="search-form">
@@ -87,146 +269,244 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
     <!-- Liste des cartes injectée dynamiquement -->
     <div class="grid" id="events-grid"></div>
 
-    <script>
-        const GRID = document.getElementById('events-grid');
+ <script>
+    const GRID = document.getElementById('events-grid');
+    const MODAL = document.getElementById('confirmation-modal');
+    const MODAL_BODY = document.getElementById('modal-body');
 
-        // 1. Fonction pour charger et afficher les événements (avec ou sans filtres)
-        async function chargerEvenements(ville = '', date = '') {
-            GRID.innerHTML = '<p class="no-result">Chargement des événements...</p>';
-            
-            let url = 'http://localhost:3000/api/events';
-            // Si des filtres sont saisis, on utilise la route de recherche de votre contrôleur
-            if (ville || date) {
-                url += `/search?ville=${encodeURIComponent(ville)}&date=${encodeURIComponent(date)}`;
-            }
+    // Variables globales pour stocker l'état de l'achat en cours avant confirmation
+    let evenementIdEnCours = null;
+    let quantiteEnCours = 0;
 
-            try {
-                const reponse = await fetch(url);
-                const evenements = await reponse.json();
+    // 1. Fonction pour charger et afficher les événements (avec ou sans filtres)
+    async function chargerEvenements(ville = '', date = '') {
+        GRID.innerHTML = '<p class="no-result">Chargement des événements...</p>';
 
-                if (!reponse.ok) throw new Error("Erreur lors de la récupération des données.");
-
-                GRID.innerHTML = '';
-                if (evenements.length === 0) {
-                    GRID.innerHTML = '<p class="no-result">Aucun événement ne correspond à vos critères de recherche.</p>';
-                    return;
-                }
-
-                evenements.forEach(event => {
-                    const dateFormatee = new Date(event.date).toLocaleDateString('fr-FR', {
-                        day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-
-                    const estComplet = event.placesDisponibles <= 0;
-
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div>
-                            <h3>${event.titre}</h3>
-                            <p>${event.description}</p>
-                            <div class="meta">
-                                📍 <strong>${event.nomLieu}</strong> (${event.ville})<br>
-                                📅 ${dateFormatee}
-                            </div>
-                        </div>
-                        <div>
-                            <p>🎟️ Places restantes : <strong>${estComplet ? 'COMPLET' : event.placesDisponibles}</strong> / ${event.placesTotales}</p>
-                            <div class="price">${event.prix.toFixed(2)} €</div>
-                            <div class="buy-section">
-                                <input type="number" id="qty-${event.id}" value="1" min="1" max="${event.placesDisponibles}" ${estComplet ? 'disabled' : ''}>
-                                <button class="btn-buy" onclick="acheterBillet(${event.id})" ${estComplet ? 'disabled' : ''}>
-                                    ${estComplet ? 'Épuisé' : 'Réserver'}
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    GRID.appendChild(card);
-                });
-            } catch (error) {
-                GRID.innerHTML = `<p class="no-result" style="color:red;">${error.message}</p>`;
-            }
+        let url = 'http://localhost:3000/api/events';
+        // Si des filtres sont saisis, on utilise la route de recherche de votre contrôleur
+        if (ville || date) {
+            url += `/search?ville=${encodeURIComponent(ville)}&date=${encodeURIComponent(date)}`;
         }
 
-        // 2. Gestionnaire de recherche dynamique
-        document.getElementById('search-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const ville = document.getElementById('search-ville').value;
-            const date = document.getElementById('search-date').value; // Retourne AAAA-MM-JJ
-            chargerEvenements(ville, date);
-        });
+        try {
+            const reponse = await fetch(url);
+            const evenements = await reponse.json();
 
-        // 3. Logique d'achat avec transmission sécurisée du JWT (Règle métier examen)
-      async function acheterBillet(eventId) {
-    const quantite = parseInt(document.getElementById(`qty-${eventId}`).value);
-    const token = localStorage.getItem('jeton_acces'); 
+            if (!reponse.ok) throw new Error("Erreur lors de la récupération des données.");
 
-    if (!token) {
-        alert("Authentification requise. Veuillez vous connecter pour acheter un billet.");
-        window.location.href = 'index.html';
+            GRID.innerHTML = '';
+            if (evenements.length === 0) {
+                GRID.innerHTML = '<p class="no-result">Aucun événement ne correspond à vos critères de recherche.</p>';
+                return;
+            }
+
+            evenements.forEach(event => {
+                const dateFormatee = new Date(event.date).toLocaleDateString('fr-FR', {
+                    day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                const estComplet = event.placesDisponibles <= 0;
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div>
+                        <h3>${event.titre}</h3>
+                        <p>${event.description}</p>
+                        <div class="meta">
+                            📍 <strong>${event.nomLieu}</strong> (${event.ville})<br>
+                            📅 ${dateFormatee}
+                        </div>
+                    </div>
+                    <div>
+                        <p> Places restantes : <strong>${estComplet ? 'COMPLET' : event.placesDisponibles}</strong> / ${event.placesTotales}</p>
+                        <div class="price">${event.prix.toFixed(2)} AR</div>
+                        <div class="buy-section">
+                            <input type="number" id="qty-${event.id}" value="1" min="1" max="${event.placesDisponibles}" ${estComplet ? 'disabled' : ''}>
+                            <button class="btn-buy" onclick="acheterBillet(${event.id})" ${estComplet ? 'disabled' : ''}>
+                                ${estComplet ? 'Épuisé' : 'Acheter'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                GRID.appendChild(card);
+            });
+        } catch (error) {
+            GRID.innerHTML = `<p class="no-result" style="color:#f0a49b;">${error.message}</p>`;
+        }
+    }
+
+    // 2. Gestionnaire de recherche dynamique
+    document.getElementById('search-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const ville = document.getElementById('search-ville').value;
+        const date = document.getElementById('search-date').value; // Retourne AAAA-MM-JJ
+        chargerEvenements(ville, date);
+    });
+
+    // 3. Étape A : Interception du clic "Acheter" et Ouverture de la Modale
+    function acheterBillet(eventId) {
+        const token = localStorage.getItem('jeton_acces');
+
+        // Vérification de connexion immédiate avant d'ouvrir la modale
+        if (!token) {
+            alert("Authentification requise. Veuillez vous connecter pour effectuer un achat.");
+            window.location.href = 'index.html';
+            return;
+        }
+
+        evenementIdEnCours = parseInt(eventId);
+        quantiteEnCours = parseInt(document.getElementById(`qty-${eventId}`).value);
+
+        // Personnalisation du texte à l'intérieur de la modale de confirmation d'achat
+        MODAL_BODY.innerHTML = `Vous êtes sur le point d'acheter <strong>${quantiteEnCours} billet(s)</strong> pour cet événement.<br>Souhaitez-vous valider la transaction ?`;
+
+        // Affichage de la modale graphique
+        MODAL.classList.add('active');
+    }
+
+    // 4. Étape B : Gestion de l'annulation (Fermeture de la modale)
+    document.getElementById('modal-btn-cancel').addEventListener('click', () => {
+        MODAL.classList.remove('active');
+        evenementIdEnCours = null;
+        quantiteEnCours = 0;
+    });
+
+    // 5. Étape C : Confirmation et Envoi de l'achat Mobile Money (Statut en attente de l'admin)
+   // Étape C CORRIGÉE : Envoie l'ID réel de l'utilisateur extrait de son jeton JWT
+document.getElementById('modal-btn-confirm').addEventListener('click', async () => {
+    if (!evenementIdEnCours || quantiteEnCours <= 0) return;
+
+    const referenceSaisie = document.getElementById('transfer-reference').value.trim();
+    const token = localStorage.getItem('jeton_acces'); // Récupère le jeton de session
+
+    // RÈGLE MÉTIER CRITIQUE : Obligation de fournir la référence de transaction
+    if (!referenceSaisie) {
+        alert("⚠️ Veuillez saisir la référence du transfert Mobile Money pour valider votre achat.");
         return;
     }
 
+    // 1. EXTRACTION DYNAMIQUE DE L'ID DE L'UTILISATEUR CONNECTÉ
+    let idUtilisateurConnecte = 1; // Valeur de secours par défaut
+    if (token) {
+        const donneesSession = decoderJWT(token);
+        if (donneesSession && donneesSession.id) {
+            idUtilisateurConnecte = parseInt(donneesSession.id); // Capture l'ID réel (ex: 2, 3, etc.)
+        }
+    }
+
+    // Fermeture de la modale graphique
+    MODAL.classList.remove('active');
+
     try {
-        const reponse = await fetch('http://localhost:3000/api/tickets/achat', {
+        // 2. Appel API pour créer l'achat avec l'ID UTILISATEUR RÉEL
+        const reponseAchat = await fetch('http://localhost:3000/api/tickets/achat', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Espace crucial après Bearer
-            },
-            body: JSON.stringify({ eventId: parseInt(eventId), quantite: parseInt(quantite) }) // Force le type entier pour le DTO NestJS
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                eventId: evenementIdEnCours, 
+                quantite: quantiteEnCours,
+                userId: idUtilisateurConnecte, // <-- CORRIGÉ : Envoi de l'ID dynamique réel !
+                modePaiement: `mobile_money (Réf: ${referenceSaisie})`
+            })
         });
 
-        const resultat = await reponse.json();
+        const resultatAchat = await reponseAchat.json();
+        if (!reponseAchat.ok) throw new Error(resultatAchat.message || "L'achat a échoué.");
 
-        if (!reponse.ok) {
-            // Affiche l'erreur exacte du ValidationPipe ou du Guard dans votre console (F12)
-            console.error("Détails de l'erreur NestJS:", resultat);
-            throw new Error(result.message || "La transaction a échoué.");
-        }
+        // 3. Message d'information à l'utilisateur
+        alert(`📲 Achat enregistré en attente !\nMontant total : ${resultatAchat.montantTotal.toFixed(2)} Ar.\n\n⚠️ Votre statut restera "Vérification en cours" tant que l'organisateur n'aura pas validé votre référence (${referenceSaisie}) depuis son espace Admin.`);
 
-        alert(`🎉 Achat réussi ! Total : ${resultat.montantTotal.toFixed(2)} € pour ${quantite} billet(s).`);
-        
+        // Rafraîchissement automatique de la grille pour décrémenter le stock de places
         const ville = document.getElementById('search-ville').value;
         const date = document.getElementById('search-date').value;
-        chargerEvenements(ville, date);
+        await chargerEvenements(ville, date);
 
     } catch (error) {
-        alert(`❌ Erreur d'achat : ${error.message}`);
+        alert(`❌ Erreur : ${error.message}`);
+    } finally {
+        // Réinitialisation complète de l'état
+        evenementIdEnCours = null;
+        quantiteEnCours = 0;
+        document.getElementById('transfer-reference').value = '';
     }
-}
+});
 
-        // Chargement initial au démarrage de la page
-        chargerEvenements();
-        // Fonction utilitaire pour décoder un jeton JWT sans librairie externe
-        function decoderJWT(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                return JSON.parse(jsonPayload);
-            } catch (e) {
-                return null;
-            }
+
+    // 6. Fonction utilitaire pour décoder un jeton JWT sans librairie externe
+    function decoderJWT(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            return null;
         }
+    }
 
-        // Récupération et affichage du nom de l'utilisateur connecté
-        const tokenSession = localStorage.getItem('jeton_acces');
-        if (tokenSession) {
-            const donneesUtilisateur = decoderJWT(tokenSession);
-            // Option A : Si vous avez inclus le nom dans le JWT (recommandé)
-            if (donneesUtilisateur && donneesUtilisateur.nom) {
-                document.getElementById('user-name').innerText = donneesUtilisateur.nom;
-            } else if (donneesUtilisateur && donneesUtilisateur.email) {
-                // Option B : Repli sur l'email si le nom n'est pas dans la charge utile du JWT
-                document.getElementById('user-name').innerText = donneesUtilisateur.email.split('@')[0];
-            }
+    // 7. Initialisation : Récupération et affichage du nom de l'utilisateur connecté
+    const tokenSession = localStorage.getItem('jeton_acces');
+    if (tokenSession) {
+        const donneesUtilisateur = decoderJWT(tokenSession);
+        if (donneesUtilisateur && donneesUtilisateur.nom) {
+            document.getElementById('user-name').innerText = donneesUtilisateur.nom;
+        } else if (donneesUtilisateur && donneesUtilisateur.email) {
+            document.getElementById('user-name').innerText = donneesUtilisateur.email.split('@')[0];
         } else {
-            document.getElementById('user-name').innerText = "Visiteur";
+            document.getElementById('user-name').innerText = "Mon Compte";
         }
+    } else {
+        document.getElementById('user-name').innerText = "Visiteur";
+    }
 
-    </script>
+    // Chargement automatique de la grille au démarrage de la page
+    chargerEvenements();
+
+    // Écouteur sur le bouton de déconnexion
+    document.getElementById('btn-logout').addEventListener('click', () => {
+        // 1. Supprime le jeton JWT de la mémoire du navigateur
+        localStorage.removeItem('jeton_acces');
+
+        // 2. Message d'information optionnel
+        alert("👋 Déconnexion réussie. À bientôt !");
+
+        // 3. Redirection immédiate vers la page de connexion
+        window.location.href = 'index.html';
+    });
+
+</script>
+<!-- Pied de page (Footer) - Appel aux Organisateurs -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-text">
+            <h3>Vous êtes organisateur d'événements ?</h3>
+            <p>N'hésitez pas à nous contacter pour publier vos concerts, matchs ou festivals sur notre plateforme et booster vos ventes par Mobile Money !</p>
+        </div>
+
+        <div class="footer-contact">
+            <a href="mailto:contact@billetterie.mg" class="contact-item">
+                <span class="contact-icon">📧</span>
+                <span class="contact-label">
+                    <small>Écrivez-nous</small>
+                    contact@billetterie.mg
+                </span>
+            </a>
+            <a href="tel:+261340000000" class="contact-item">
+                <span class="contact-icon">📞</span>
+                <span class="contact-label">
+                    <small>Appelez-nous</small>
+                    +261 34 00 000 00
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Plateforme Billetterie Madagascar. Tous droits réservés.</p>
+    </div>
+</footer>
 </body>
 </html>

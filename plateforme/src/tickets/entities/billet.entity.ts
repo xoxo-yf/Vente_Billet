@@ -14,7 +14,7 @@ export class Billet {
   @Column({ type: 'float' })
   prix: number;
 
-  @Column({ default: 'valide' })
+  @Column({ default: 'en_attente' })
   statut: string;
 
   @ManyToOne(() => Event, { eager: true, onDelete: 'CASCADE' })
@@ -25,4 +25,7 @@ export class Billet {
 
   @ManyToOne(() => Achat, (achat) => achat.billets, { onDelete: 'CASCADE' })
   achat: Achat;
+
+   @Column({ nullable: true }) // Ex: 'carte_bancaire', 'especes', 'pass_culture'
+  modePaiement: string;
 }

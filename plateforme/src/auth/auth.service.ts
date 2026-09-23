@@ -45,9 +45,15 @@ export class AuthService {
       throw new UnauthorizedException('Identifiants incorrects.');
     }
 
-    const payload = { id: user.id, email: user.email };
+    const payload = {
+      id: user.id,
+      email: user.email,
+      nom: user.nom,
+      role: user.email.endsWith('@billetterie.admin') ? 'admin' : 'client',
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
 }
+

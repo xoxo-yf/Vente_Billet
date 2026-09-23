@@ -3,117 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Historique de Billets - Billetterie</title>
+    <title>Mon Historique d'Achats - Mobile Money</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 30px; color: #333; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        h1 { margin: 0; color: #2c3e50; font-size: 24px; }
-        .btn-nav { background-color: #6f42c1; color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-block; }
-        .btn-nav:hover { background-color: #59339d; }
-        
-        /* Structure du tableau d'historique */
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        th, td { padding: 15px 20px; text-align: left; }
-        th { background-color: #6f42c1; color: white; font-weight: 600; font-size: 14px; text-transform: uppercase; }
-        tr { border-bottom: 1px solid #e2e8f0; }
-        tr:last-child { border-bottom: none; }
-        tr:hover { background-color: #f8fafc; }
-        
-        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .badge-success { background-color: #d1e7dd; color: #0f5132; }
-        
-        .no-data { text-align: center; color: #888; padding: 40px; background: white; border-radius: 10px; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Serif:wght@600&display=swap');
+/*  REMPLACER PAR : */
+       :root {
+            --ink: #e7edf1;
+            --ink-soft: #9fb0bd;
+            --ink-faint: #6d7f8c;
+            --paper: #0f171d;
+            --surface: #16212a;
+            --surface-alt: #1c2a34;
+            --line: #26343f;
+            --accent: #1789a8;
+            --accent-dark: #12657d;
+            --accent-tint: rgba(23, 137, 168, 0.16);
+            --radius: 14px;
+            --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: var(--font-sans); background-color: var(--paper); color: var(--ink); margin: 0; padding: 32px 24px 56px; }
+        .container { max-width: 1080px; margin: 0 auto; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; background: linear-gradient(135deg, var(--surface-alt) 0%, var(--paper) 100%); padding: 22px 30px; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 28px; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
+        h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+        .btn-nav { display: inline-flex; align-items: center; gap: 6px; background-color: var(--accent); color: #fff; padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background-color .2s ease, transform .15s ease; }
+        .btn-nav:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
+
+        .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: 0 3px 14px rgba(0,0,0,0.28); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; font-size: 14px; }
+        th { background-color: var(--surface-alt); color: var(--ink-soft); font-weight: 700; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.05em; border-bottom: 1px solid var(--line); }
+        tbody tr { border-bottom: 1px solid var(--line); transition: background-color .12s ease; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background-color: var(--surface-alt); }
+
+        .id-cell { color: #7fd3e8; font-weight: 700; }
+
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; display: inline-block; }
+        .badge-success { background-color: rgba(34, 197, 94, 0.16); color: #7be3a4; }
+        .badge-warning { background-color: rgba(245, 179, 30, 0.16); color: #f0c464; }
+        .badge-danger  { background-color: rgba(224, 84, 71, 0.16); color: #f0a49b; }
+
+        .ref-text { font-family: 'SFMono-Regular', Consolas, monospace; background: var(--surface-alt); padding: 4px 9px; border-radius: 6px; color: var(--ink-soft); font-size: 12px; border: 1px solid var(--line); }
+
+        .no-data { text-align: center; color: var(--ink-soft); padding: 56px 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); font-size: 15px; }
+
+        a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+        @media (max-width: 640px) {
+            body { padding: 16px 12px 40px; }
+            .header { flex-direction: column; align-items: flex-start; padding: 18px 22px; }
+            .table-wrap { overflow-x: auto; }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header">
-            <h1>📜 Mon Historique d'Achats</h1>
-            <div>
-                <a href="catalogue.html" class="btn-nav">↩️ Retour au Catalogue</a>
-            </div>
+            <h1> Historique de mes Achats</h1>
+            <a href="catalogue.html" class="btn-nav">Retour au Catalogue</a>
         </div>
 
-        <!-- Zone d'affichage des billets -->
         <div id="historique-zone">
-            <p class="no-data">Chargement de votre historique...</p>
+            <p class="no-data">Chargement de votre historique d'achats Mobile Money...</p>
         </div>
     </div>
+    <!-- Fenêtre Modale d'affichage du Code QR d'accès -->
+<div id="qr-modal" class="modal-backdrop" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 29, 0.85); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;">
+    <div style="background: #16212a; padding: 30px; border-radius: 14px; max-width: 400px; width: 100%; border: 1px solid #26343f; text-align: center; box-shadow: 0 20px 25px rgba(0,0,0,0.5);">
+        <div style="font-size: 32px; margin-bottom: 10px;"></div>
+        <h2 style="margin: 0 0 4px; font-family: var(--font-title); font-size: 20px; color: #fff;">Votre Ticket d'Entrée</h2>
+        <p id="qr-event-title" style="margin: 0 0 20px; color: #7fd3e8; font-weight: 600; font-size: 15px;"></p>
+        
+        <!-- Zone d'affichage du Code QR généré en direct -->
+        <div style="background: white; padding: 16px; border-radius: 10px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <img id="qr-image" src="" alt="Code QR d'accès" style="display: block; width: 200px; height: 200px;">
+        </div>
+        
+        <div style="text-align: left; background: #1c2a34; padding: 12px; border-radius: 8px; font-size: 13px; color: #9fb0bd; margin-bottom: 24px; border: 1px solid #26343f;">
+             <span id="qr-event-lieu" style="color: #fff; font-weight: 500;"></span><br>
+             Places valides : <span id="qr-event-qty" style="color: #fff; font-weight: bold;"></span> Personne(s)<br>
+             Signature unique : <span id="qr-event-id" style="font-family: monospace; color: #7fd3e8;"></span>
+        </div>
+        
+        <button id="qr-modal-close" style="width: 100%; background-color: #1789a8; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background .15s;">
+            Fermer le Ticket
+        </button>
+    </div>
+</div>
 
-    <script>
-        async function chargerHistorique() {
-            const zone = document.getElementById('historique-zone');
-            const token = localStorage.getItem('jeton_acces'); // Récupère le jeton JWT du login
 
-            if (!token) {
-                zone.innerHTML = '<p class="no-data" style="color: red;">🔒 Authentification requise. Redirection...</p>';
-                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+<script>
+    async function chargerHistorique() {
+        const zone = document.getElementById('historique-zone');
+        const token = localStorage.getItem('jeton_acces'); 
+
+        if (!token) {
+            zone.innerHTML = '<p class="no-data" style="color: #f0a49b;">🔒 Authentification requise. Redirection...</p>';
+            setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+            return;
+        }
+
+        try {
+            const reponse = await fetch('http://localhost:3000/api/tickets/historique', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            });
+
+            if (!reponse.ok) throw new Error("Impossible de charger les données de votre historique.");
+
+            const billets = await reponse.json();
+
+            if (billets.length === 0) {
+                zone.innerHTML = '<p class="no-data">📲 Vous n\'avez pas encore effectué d\'achat Mobile Money sur cette plateforme.</p>';
                 return;
             }
 
-            try {
-                // Interrogation de l'API protégée par le JwtAuthGuard
-                const reponse = await fetch('http://localhost:3000/api/tickets/historique', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}` // Transmission du jeton dans le header
-                    }
-                });
+            const achatsRegroupes = {};
 
-                if (!reponse.ok) throw new Error("Impossible de charger l'historique.");
+            billets.forEach(billet => {
+                const achatId = (billet.achat && billet.achat.id) ? billet.achat.id : `temp_${billet.id}`;
 
-                const billets = await reponse.json();
-
-                if (billets.length === 0) {
-                    zone.innerHTML = '<p class="no-data">🎟️ Vous n\'avez pas encore acheté de billets sur la plateforme.</p>';
-                    return;
+                if (!achatsRegroupes[achatId]) {
+                    achatsRegroupes[achatId] = {
+                        idAchat: achatId, // Mémorise l'ID pour le ticket numérique
+                        dateAchat: billet.dateReservation,
+                        titre: billet.event ? billet.event.titre : 'Événement',
+                        nomLieu: billet.event ? billet.event.nomLieu : 'Lieu',
+                        ville: billet.event ? billet.event.ville : 'Ville',
+                        canalPaiement: billet.modePaiement ? billet.modePaiement : 'En attente de paiement',
+                        statut: billet.statut,
+                        quantiteTotal: 0,
+                        montantTotalCumule: 0
+                    };
                 }
 
-                // Construction dynamique du tableau HTML
-                let htmlTable = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID Billet</th>
-                                <th>Événement</th>
-                                <th>Lieu / Ville</th>
-                                <th>Date d'Achat</th>
-                                <th>Prix</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+                achatsRegroupes[achatId].quantiteTotal += 1;
+                achatsRegroupes[achatId].montantTotalCumule += billet.prix;
+            });
 
-                billets.forEach(billet => {
-                    const dateAchat = new Date(billet.dateReservation).toLocaleDateString('fr-FR', {
-                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-
-                    htmlTable += `
+            let htmlTable = `
+                <div class="table-wrap">
+                <table>
+                    <thead>
                         <tr>
-                            <td><strong>#${billet.id}</strong></td>
-                            <td>${billet.event.titre}</td>
-                            <td>📍 ${billet.event.nomLieu} (${billet.event.ville})</td>
-                            <td>📅 ${dateAchat}</td>
-                            <td style="font-weight: bold; color: #28a745;">${billet.prix.toFixed(2)} €</td>
-                            <td><span class="badge badge-success">${billet.statut}</span></td>
+                            <th>Événement</th>
+                            <th>Lieu / Ville</th>
+                            <th>Date d'Achat</th>
+                            <th style="text-align: center;">Quantité</th>
+                            <th>Canal / Référence</th>
+                            <th>Montant Total</th>
+                            <th>Statut de l'Achat</th>
+                            <th style="text-align: center;">Billet d'entrée</th> <!-- Nouvelle colonne -->
                         </tr>
-                    `;
+                    </thead>
+                    <tbody>
+            `;
+
+            Object.values(achatsRegroupes).forEach(achat => {
+                const dateRes = new Date(achat.dateAchat).toLocaleDateString('fr-FR', {
+                    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
                 });
 
-                htmlTable += '</tbody></table>';
-                zone.innerHTML = htmlTable;
+                let badgeClass = 'badge-warning';
+                let labelStatut = 'Vérification en cours';
+                let actionBilletHtml = '';
 
-            } catch (error) {
-                zone.innerHTML = `<p class="no-data" style="color: red;">❌ Erreur : ${error.message}</p>`;
-            }
+                // RÈGLE MÉTIER : Génération du droit d'accès numérique conditionnel
+                if (achat.statut === 'paye') {
+                    badgeClass = 'badge-success';
+                    labelStatut = 'Achat validé';
+                    // Le bouton appelle une fonction d'affichage du ticket avec les paramètres requis
+                    actionBilletHtml = `<button class="btn-nav" style="padding: 6px 14px; font-size: 12px; background-color: #1789a8;" onclick="afficherPassNumerique('${achat.titre}', '${achat.nomLieu}', '${achat.quantiteTotal}', '${achat.idAchat}')">Accéder au pass</button>`;
+                } else if (achat.statut === 'refuse') {
+                    badgeClass = 'badge-danger';
+                    labelStatut = 'Achat refusé';
+                    actionBilletHtml = `<span style="color: #f0a49b; font-size: 12px; font-style: italic;">Accès annulé</span>`;
+                } else {
+                    actionBilletHtml = `<span style="color: var(--ink-faint); font-size: 12px; font-style: italic;">En attente de validation</span>`;
+                }
+
+                htmlTable += `
+                    <tr>
+                        <td><strong style="color: var(--ink);">${achat.titre}</strong></td>
+                        <td> ${achat.nomLieu} (${achat.ville})</td>
+                        <td>${dateRes}</td>
+                        <td style="font-weight: 700; color: #7fd3e8; text-align: center;">${achat.quantiteTotal} billet(s)</td>
+                        <td><span class="ref-text">${achat.canalPaiement}</span></td>
+                        <td style="font-weight: 700; color: var(--ink);">${Math.round(achat.montantTotalCumule)} Ar</td>
+                        <td>
+                            <span class="badge ${badgeClass}">
+                                ${labelStatut}
+                            </span>
+                        </td>
+                        <td style="text-align: center;">${actionBilletHtml}</td> <!-- Cellule du pass -->
+                    </tr>
+                `;
+            });
+
+            htmlTable += '</tbody></table></div>';
+            zone.innerHTML = htmlTable;
+
+        } catch (error) {
+            zone.innerHTML = `<p class="no-data" style="color: #f0a49b;">❌ Erreur : ${error.message}</p>`;
         }
+    }
 
-        // Lance le chargement au démarrage de la page
-        chargerHistorique();
-    </script>
+    // Nouvelle fonction : Affiche le billet numérique sécurisé (Simulation d'accès à l'événement)
+    function afficherPassNumerique(titre, lieu, quantite, idAchat) {
+        alert(
+            `====================================\n` +
+            `       PASS D'ACCÈS NUMÉRIQUE \n` +
+            `====================================\n\n` +
+            `ÉVÉNEMENT : ${titre}\n` +
+            `LIEU COMPTEUR : ${lieu}\n` +
+            `PLACES VALIDES : ${quantite} Personne(s)\n` +
+            `CODE UNIQUE DE SÉCURITÉ : #MM-${idAchat}\n\n` +
+            `------------------------------------\n` +
+            `👉 Présentez cet écran au guichet d'entrée.\n` +
+            `Bon événement sur notre plateforme !`
+        );
+    }
+
+    chargerHistorique();
+
+    // Écouteur pour fermer la modale du Code QR
+document.getElementById('qr-modal-close').addEventListener('click', () => {
+    const modalQr = document.getElementById('qr-modal');
+    modalQr.style.opacity = '0';
+    modalQr.style.pointerEvents = 'none';
+});
+
+
+function afficherPassNumerique(titre, lieu, quantite, idAchat) {
+    const modalQr = document.getElementById('qr-modal');
+    
+    // 1. Remplissage des textes dans la modale
+    document.getElementById('qr-event-title').innerText = titre;
+    document.getElementById('qr-event-lieu').innerText = lieu;
+    document.getElementById('qr-event-qty').innerText = quantite;
+    document.getElementById('qr-event-id').innerText = '#MM-ACHAT-' + idAchat;
+    
+    // 2. Chaîne à encoder dans le QR code
+    const donneesText = "VALIDATION ENTREE : ID_COMMANDE=#" + idAchat + " | EVENEMENT=" + titre + " | PLACES=" + quantite;
+    
+    // 3. URL correcte de l'API QR code
+    const googleQrApiUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(donneesText);
+    
+    // 4. Injection de l'image
+    document.getElementById('qr-image').src = googleQrApiUrl;
+    
+    // 5. Affichage de la modale
+    modalQr.style.opacity = '1';
+    modalQr.style.pointerEvents = 'auto';
+}
+
+</script>
+
+
 </body>
 </html>

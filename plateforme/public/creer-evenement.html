@@ -5,26 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un Événement - Billetterie</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; padding: 40px; display: flex; justify-content: center; margin: 0; }
-        .form-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); width: 100%; max-width: 550px; }
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; font-weight: 600; }
-        label { display: block; margin: 14px 0 6px; color: #34495e; font-weight: bold; font-size: 14px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 15px; transition: border 0.2s; }
-        input:focus, textarea:focus { border-color: #6f42c1; outline: none; }
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap');
+
+        :root {
+            --ink: #3d3a3f;
+            --ink-soft: #7a7480;
+            --ink-faint: #a79fac;
+            --paper: #f7f3ef;
+            --surface: #fffdfb;
+            --line: #ece3dd;
+            --accent: #b79fd1;
+            --accent-dark: #9c81ba;
+            --accent-tint: #f2ecf6;
+            --success-tint: #eaf1e8;
+            --success-text: #4d6a4a;
+            --error-tint: #fbeeec;
+            --error-text: #a25a51;
+            --radius: 16px;
+            --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--paper);
+            padding: 48px 24px;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        .form-box {
+            background: var(--surface);
+            padding: 42px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(120, 100, 90, 0.1);
+            border: 1px solid var(--line);
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .form-icon { text-align: center; font-size: 30px; margin-bottom: 6px; }
+
+        h2 {
+            text-align: center;
+            color: var(--ink);
+            margin: 0 0 6px;
+            font-family: var(--font-title);
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--ink-soft);
+            font-size: 14px;
+            margin: 0 0 28px;
+        }
+
+        label { display: block; margin: 16px 0 6px; color: var(--ink); font-weight: 600; font-size: 13.5px; }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 14.5px;
+            font-family: inherit;
+            color: var(--ink);
+            background: var(--paper);
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        input::placeholder, textarea::placeholder { color: var(--ink-faint); }
+        input:focus, textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-tint); background: var(--surface); }
         textarea { height: 100px; resize: none; }
+
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
-        button { width: 100%; padding: 14px; background-color: #6f42c1; color: white; border: none; border-radius: 6px; font-size: 16px; margin-top: 30px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-        button:hover { background-color: #59339d; }
-        .success { background-color: #d1e7dd; color: #0f5132; padding: 12px; border-radius: 6px; text-align: center; margin-top: 20px; display: none; font-weight: bold; }
-        .error { background-color: #f8d7da; color: #842029; padding: 12px; border-radius: 6px; text-align: center; margin-top: 20px; display: none; }
-        .nav-link { display: block; text-align: center; margin-top: 20px; color: #6f42c1; text-decoration: none; font-size: 14px; }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 15.5px;
+            margin-top: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background-color .2s ease, transform .15s ease;
+        }
+        button:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
+
+        .success {
+            background-color: var(--success-tint);
+            color: var(--success-text);
+            padding: 13px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .error {
+            background-color: var(--error-tint);
+            color: var(--error-text);
+            padding: 13px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: var(--accent-dark);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
         .nav-link:hover { text-underline-offset: 3px; text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .form-box { padding: 32px 24px; }
+            .row { flex-direction: column; gap: 0; }
+        }
     </style>
 </head>
 <body>
     <div class="form-box">
-        <h2>Publier un nouvel Événement</h2>
+        <div class="form-icon"></div>
+        <h2>Publier un nouvel événement</h2>
+        <p class="subtitle">Quelques informations suffisent pour le mettre en vente</p>
         <form id="form-event">
             <label>Titre de l'événement</label>
             <input type="text" id="event-titre" placeholder="ex: Concert de Rohff" required>
@@ -32,7 +155,7 @@
             <label>Description</label>
             <textarea id="event-description" placeholder="Détails, artistes, première partie..." required></textarea>
 
-            <label>Date et Heure</label>
+            <label>Date et heure</label>
             <input type="datetime-local" id="event-date" required>
 
             <div class="row">
@@ -41,7 +164,7 @@
                     <input type="text" id="event-ville" placeholder="ex: Paris" required>
                 </div>
                 <div class="col">
-                    <label>Nom du Lieu (Salle)</label>
+                    <label>Nom du lieu (salle)</label>
                     <input type="text" id="event-lieu" placeholder="ex: Accor Arena" required>
                 </div>
             </div>
@@ -52,23 +175,23 @@
                     <input type="number" id="event-places" min="1" placeholder="ex: 500" required>
                 </div>
                 <div class="col">
-                    <label>Prix du billet (€)</label>
+                    <label>Prix du billet (Ar)</label>
                     <input type="number" id="event-prix" min="0" step="0.01" placeholder="ex: 45.00" required>
                 </div>
             </div>
 
             <button type="submit">Mettre en vente sur la plateforme</button>
         </form>
-        <div id="ok-msg" class="success">L'événement a été injecté avec succès dans PostgreSQL !</div>
+        <div id="ok-msg" class="success"> L'événement a été publié avec succès !</div>
         <div id="err-msg" class="error"></div>
-        <a href="index.html" class="nav-link">Retour à la page de connexion</a>
+        <a href="admin.html" class="nav-link">retour</a>
     </div>
 
     <script>
         // Écoute le clic de soumission du formulaire
     document.getElementById('form-event').addEventListener('submit', async (e) => {
         e.preventDefault(); // Bloque le rafraîchissement de la page
-        
+
         // 1. Récupération des valeurs tapées à l'écran
         const titre = document.getElementById('event-titre').value;
         const description = document.getElementById('event-description').value;
@@ -83,7 +206,7 @@
             // 2. L'action de POSTER vers l'API NestJS
             const reponse = await fetch('http://localhost:3000/api/events', {
                 method: 'POST', // Spécifie la méthode HTTP POST
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json' // Dit à l'API qu'on envoie du JSON
                 },
                 body: JSON.stringify({ titre, description, date, ville, nomLieu, placesTotales, prix }) // Convertit l'objet en texte JSON
@@ -98,6 +221,7 @@
 
             // 4. Succès : Affichage du bandeau vert si PostgreSQL a enregistré la ligne
             document.getElementById('ok-msg').style.display = 'block';
+            document.getElementById('err-msg').style.display = 'none';
             document.getElementById('form-event').reset(); // Vide les champs pour le prochain événement
 
         } catch (error) {
@@ -105,8 +229,11 @@
             const errDiv = document.getElementById('err-msg');
             errDiv.innerText = error.message;
             errDiv.style.display = 'block';
+            document.getElementById('ok-msg').style.display = 'none';
         }
     });
+
+
 
     </script>
 </body>
