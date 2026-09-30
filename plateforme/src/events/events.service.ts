@@ -14,7 +14,7 @@ export class EventsService {
     const nouvelEvenement = this.eventRepo.create({
       ...dto,
       date: new Date(dto.date),
-      placesDisponibles: dto.placesTotales, // Initially, all seats are free
+      placesDisponibles: dto.placesTotales,
     });
     return this.eventRepo.save(nouvelEvenement);
   }

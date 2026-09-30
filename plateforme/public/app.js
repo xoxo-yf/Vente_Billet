@@ -1,5 +1,31 @@
 const API_URL = 'http://localhost:3000/auth';
 
+
+function decoderJWT(token) {
+    try {
+        if (!token) return null;
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        const base64Url = parts[1];
+        
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        
+        
+        while (base64.length % 4) {
+            base64 += '=';
+        }
+        
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("JWT decoding failed:", e);
+        return null;
+    }
+}
+
 // Gestion de l'Inscription
 const formRegister = document.getElementById('form-register');
 if (formRegister) {
@@ -11,8 +37,8 @@ if (formRegister) {
         
         const errDiv = document.getElementById('error-message');
         const succDiv = document.getElementById('success-message');
-        errDiv.style.display = 'none';
-        succDiv.style.display = 'none';
+        if (errDiv) errDiv.style.display = 'none';
+        if (succDiv) succDiv.style.display = 'none';
 
         try {
             const reponse = await fetch(`${API_URL}/register`, {
@@ -27,13 +53,17 @@ if (formRegister) {
                 throw new Error(donnees.message || "Une erreur est survenue lors de l'inscription.");
             }
 
-            succDiv.innerText = "Compte créé avec succès ! Redirection...";
-            succDiv.style.display = 'block';
+            if (succDiv) {
+                succDiv.innerText = "Compte créé avec succès ! Redirection...";
+                succDiv.style.display = 'block';
+            }
             setTimeout(() => { window.location.href = 'index.html'; }, 2000);
 
         } catch (error) {
-            errDiv.innerText = error.message;
-            errDiv.style.display = 'block';
+            if (errDiv) {
+                errDiv.innerText = error.message;
+                errDiv.style.display = 'block';
+            }
         }
     });
 }
@@ -43,11 +73,11 @@ const formLogin = document.getElementById('form-login');
 if (formLogin) {
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('login-email').value;
+        const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
         
         const errDiv = document.getElementById('error-message');
-        errDiv.style.display = 'none';
+        if (errDiv) errDiv.style.display = 'none';
 
         try {
             const reponse = await fetch(`${API_URL}/login`, {
@@ -62,18 +92,29 @@ if (formLogin) {
                 throw new Error(donnees.message || "Identifiants incorrects.");
             }
 
-            // Enregistre le jeton JWT de l'examen dans le navigateur
-          if (donnees.access_token) {
-    localStorage.setItem('jeton_acces', donnees.access_token);
-} else if (donnees.jeton_acces) {
-    // Sécurité si votre code renvoie la version française
-    localStorage.setItem('jeton_acces', donnees.jeton_acces);
-}
-            window.location.href = 'catalogue.html';
+            // Enregistre le jeton JWT dans le navigateur
+            const token = donnees.access_token || donnees.jeton_acces;
+            if (token) {
+                localStorage.setItem('jeton_acces', token);
+            }
+
+            const donneesSession = decoderJWT(token);
+            const emailMinuscule = email.toLowerCase();
+            
+            // PASSERELLE DE REDIRECTION INFAILLIBLE (.admin)
+            if ((donneesSession && donneesSession.role === 'admin') || emailMinuscule.endsWith('.admin')) {
+                console.log("Connexion Organisateur reconnue. Routage vers admin.html");
+                window.location.href = 'admin.html';
+            } else {
+                console.log("Connexion Client reconnue. Routage vers catalogue.html");
+                window.location.href = 'catalogue.html';
+            }
             
         } catch (error) {
-            errDiv.innerText = error.message;
-            errDiv.style.display = 'block';
+            if (errDiv) {
+                errDiv.innerText = error.message;
+                errDiv.style.display = 'block';
+            }
         }
     });
 }

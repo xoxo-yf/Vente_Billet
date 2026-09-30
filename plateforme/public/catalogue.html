@@ -164,7 +164,7 @@ h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 60
 }
 .btn-logout:hover { background-color: rgba(224, 139, 129, 0.24); transform: translateY(-1px); }
 
-/* Barre de recherche */
+
 .search-box { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; max-width: 1080px; margin: 0 auto 32px; padding: 22px 30px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28); }
 .search-group { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 6px; }
 .search-group label { font-weight: 500; font-size: 13px; color: var(--ink-soft); }
@@ -173,7 +173,7 @@ h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 60
 .btn-search { background-color: var(--accent); color: #fff; border: none; padding: 11px 26px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; transition: background-color .2s ease, transform .15s ease; }
 .btn-search:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
 
-/* Grille des événements */
+
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; max-width: 1080px; margin: 0 auto; }
 .card { display: flex; flex-direction: column; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28); transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
 .card:hover { box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4); transform: translateY(-2px); border-color: rgba(23, 137, 168, 0.4); }
@@ -182,7 +182,7 @@ h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 60
 .card .meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 14px; line-height: 1.6; }
 .card .price { margin: 12px 0 0; font-size: 22px; font-weight: 600; color: var(--accent-dark); font-variant-numeric: tabular-nums; }
 
-/* Achat */
+
 .buy-section { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); }
 .buy-section input { width: 64px; padding: 9px 8px; border: 1px solid var(--line); border-radius: 10px; text-align: center; font: inherit; background: var(--surface-alt); color: var(--ink); color-scheme: dark; }
 .buy-section input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
@@ -190,14 +190,14 @@ h1 { margin: 0; font-family: var(--font-title); font-size: 23px; font-weight: 60
 .btn-buy:hover { background-color: var(--accent-dark); transform: translateY(-1px); }
 .btn-buy:disabled { background-color: #26343f; color: var(--ink-faint); cursor: not-allowed; transform: none; }
 
-/* Aucun résultat */
+
 .no-result { grid-column: 1 / -1; text-align: center; color: var(--ink-soft); padding: 48px 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); }
 
-/* Accessibilité */
+
 a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-/* Mobile */
+
 @media (max-width: 640px) {
     body { padding: 16px 12px 40px; }
     .header { flex-direction: column; align-items: flex-start; padding: 18px 22px; }
@@ -205,7 +205,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
     .btn-search { width: 100%; }
 }
 
-/* Styles de la Modale */
+
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(4, 8, 12, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 16px; }
 .modal-backdrop.active { opacity: 1; pointer-events: auto; }
 .modal-content { background: var(--surface); padding: 34px; border-radius: 20px; max-width: 440px; width: 100%; border: 1px solid var(--line); text-align: center; transform: scale(0.96); transition: transform 0.25s ease; box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.6); }
@@ -229,9 +229,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
         <h2>Confirmer l'achat</h2>
         <p id="modal-body">Vous êtes sur le point d'acheter des places.</p>
 
-        <!-- Instructions et Input pour Mobile Money fixes -->
+      
         <div id="zone-mobile-money" style="background-color: var(--accent-tint); color: #7fd3e8; padding: 16px; border-radius: 12px; font-size: 13px; text-align: left; margin-bottom: 20px; border: 1px solid var(--line);">
-            📌 <strong>Numéro de l'organisateur :</strong> <span style="font-weight: bold; font-size: 14px;">+261 34 00 000 00</span><br>
+             <strong>Numéro de l'organisateur :</strong> <span style="font-weight: bold; font-size: 14px;">+261 34 00 000 00</span><br>
             Veuillez effectuer le transfert (Mvola, Orange Money, Airtel Money) puis saisir la référence ci-dessous :
 
             <label style="display: block; font-weight: bold; margin-top: 14px; margin-bottom: 6px; color: var(--ink);">Référence du transfert</label>
@@ -278,12 +278,12 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
     let evenementIdEnCours = null;
     let quantiteEnCours = 0;
 
-    // 1. Fonction pour charger et afficher les événements (avec ou sans filtres)
+    // 1. Fonction pour charger et afficher les événements
     async function chargerEvenements(ville = '', date = '') {
         GRID.innerHTML = '<p class="no-result">Chargement des événements...</p>';
 
         let url = 'http://localhost:3000/api/events';
-        // Si des filtres sont saisis, on utilise la route de recherche de votre contrôleur
+       
         if (ville || date) {
             url += `/search?ville=${encodeURIComponent(ville)}&date=${encodeURIComponent(date)}`;
         }
@@ -344,7 +344,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
         chargerEvenements(ville, date);
     });
 
-    // 3. Étape A : Interception du clic "Acheter" et Ouverture de la Modale
+    // Interception du clic "Acheter" et Ouverture de la Modale
     function acheterBillet(eventId) {
         const token = localStorage.getItem('jeton_acces');
 
@@ -365,15 +365,15 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline
         MODAL.classList.add('active');
     }
 
-    // 4. Étape B : Gestion de l'annulation (Fermeture de la modale)
+    //  Gestion de l'annulation (Fermeture de la modale)
     document.getElementById('modal-btn-cancel').addEventListener('click', () => {
         MODAL.classList.remove('active');
         evenementIdEnCours = null;
         quantiteEnCours = 0;
     });
 
-    // 5. Étape C : Confirmation et Envoi de l'achat Mobile Money (Statut en attente de l'admin)
-   // Étape C CORRIGÉE : Envoie l'ID réel de l'utilisateur extrait de son jeton JWT
+    //  Confirmation et Envoi de l'achat Mobile Money (Statut en attente de l'admin)
+  
 document.getElementById('modal-btn-confirm').addEventListener('click', async () => {
     if (!evenementIdEnCours || quantiteEnCours <= 0) return;
 
@@ -399,14 +399,14 @@ document.getElementById('modal-btn-confirm').addEventListener('click', async () 
     MODAL.classList.remove('active');
 
     try {
-        // 2. Appel API pour créer l'achat avec l'ID UTILISATEUR RÉEL
+        //  Appel API pour créer l'achat avec l'ID UTILISATEUR RÉEL
         const reponseAchat = await fetch('http://localhost:3000/api/tickets/achat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 eventId: evenementIdEnCours, 
                 quantite: quantiteEnCours,
-                userId: idUtilisateurConnecte, // <-- CORRIGÉ : Envoi de l'ID dynamique réel !
+                userId: idUtilisateurConnecte, // Envoi de l'ID dynamique réel !
                 modePaiement: `mobile_money (Réf: ${referenceSaisie})`
             })
         });
@@ -415,7 +415,7 @@ document.getElementById('modal-btn-confirm').addEventListener('click', async () 
         if (!reponseAchat.ok) throw new Error(resultatAchat.message || "L'achat a échoué.");
 
         // 3. Message d'information à l'utilisateur
-        alert(`📲 Achat enregistré en attente !\nMontant total : ${resultatAchat.montantTotal.toFixed(2)} Ar.\n\n⚠️ Votre statut restera "Vérification en cours" tant que l'organisateur n'aura pas validé votre référence (${referenceSaisie}) depuis son espace Admin.`);
+        alert(` Achat enregistré en attente !\nMontant total : ${resultatAchat.montantTotal.toFixed(2)} Ar.\n\n⚠️ Votre statut restera "Vérification en cours" tant que l'organisateur n'aura pas validé votre référence (${referenceSaisie}) depuis son espace Admin.`);
 
         // Rafraîchissement automatique de la grille pour décrémenter le stock de places
         const ville = document.getElementById('search-ville').value;
@@ -423,7 +423,7 @@ document.getElementById('modal-btn-confirm').addEventListener('click', async () 
         await chargerEvenements(ville, date);
 
     } catch (error) {
-        alert(`❌ Erreur : ${error.message}`);
+        alert(` Erreur : ${error.message}`);
     } finally {
         // Réinitialisation complète de l'état
         evenementIdEnCours = null;
@@ -470,13 +470,32 @@ document.getElementById('modal-btn-confirm').addEventListener('click', async () 
         // 1. Supprime le jeton JWT de la mémoire du navigateur
         localStorage.removeItem('jeton_acces');
 
-        // 2. Message d'information optionnel
-        alert("👋 Déconnexion réussie. À bientôt !");
+      
 
         // 3. Redirection immédiate vers la page de connexion
         window.location.href = 'index.html';
     });
-
+(function verifierEtRedirigerAdmin() {
+    // 1. Récupération du jeton de session dans le navigateur
+    const token = localStorage.getItem('jeton_acces');
+    
+    if (token) {
+        try {
+            // 2. Décodage rapide et propre du jeton JWT
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const payload = JSON.parse(window.atob(base64));
+            
+            // 3. RÈGLE STRICTE : Si c'est le BOSS, on l'envoie sur sa page admin
+            if (payload.role === 'admin' || (payload.email && payload.email.toLowerCase() === 'boss@billeterie.admin')) {
+                console.log("👮 Session Admin détectée ! Redirection forcée vers l'espace de validation...");
+                window.location.replace('admin.html'); // Remplace l'historique pour éviter les retours en arrière
+            }
+        } catch (erreur) {
+            console.error("Erreur lors de la vérification de la passerelle :", erreur);
+        }
+    }
+})();
 </script>
 <!-- Pied de page (Footer) - Appel aux Organisateurs -->
 <footer class="main-footer">

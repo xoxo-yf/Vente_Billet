@@ -10,7 +10,7 @@ import { User } from '../users/entities/user.entity.js';
     // Indispensable pour injecter le UserRepository dans l'AuthService
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: '233842132', // Votre clé de sécurité .env
+      secret: '233842132', 
       signOptions: { expiresIn: '1d' },
     }),
   ],

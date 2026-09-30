@@ -203,7 +203,7 @@
         const prix = parseFloat(document.getElementById('event-prix').value);
 
         try {
-            // 2. L'action de POSTER vers l'API NestJS
+            //  L'action de POSTER vers l'API NestJS
             const reponse = await fetch('http://localhost:3000/api/events', {
                 method: 'POST', // Spécifie la méthode HTTP POST
                 headers: {
@@ -214,12 +214,12 @@
 
             const result = await reponse.json();
 
-            // 3. Gestion des erreurs renvoyées par le serveur
+            //  Gestion des erreurs renvoyées par le serveur
             if (!reponse.ok) {
                 throw new Error(result.message || "Impossible de publier l'événement.");
             }
 
-            // 4. Succès : Affichage du bandeau vert si PostgreSQL a enregistré la ligne
+            //  Affichage du bandeau vert si PostgreSQL a enregistré la ligne
             document.getElementById('ok-msg').style.display = 'block';
             document.getElementById('err-msg').style.display = 'none';
             document.getElementById('form-event').reset(); // Vide les champs pour le prochain événement

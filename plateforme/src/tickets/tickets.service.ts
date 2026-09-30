@@ -13,7 +13,7 @@ export class TicketsService {
     @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
   ) {}
 
-  // CORRIGÉ : Ajout du paramètre optionnel modePaiement pour intercepter la référence dès le début
+  
   async acheterBillets(userId: number, eventId: number, quantite: number, modePaiement?: string): Promise<Achat> {
     const event = await this.eventRepo.findOneBy({ id: eventId });
     if (!event) throw new NotFoundException("L'événement demandé n'existe pas.");
@@ -102,11 +102,11 @@ export class TicketsService {
   }
 
   // Historique de l'utilisateur connecté
-// À remplacer dans src/tickets/tickets.service.ts :
+
   async obtenirHistorique(userId: number): Promise<Billet[]> {
     return this.billetRepo.find({
       where: { user: { id: userId } },
-      // CRUCIAL : Force TypeORM à charger l'achat et l'événement pour éviter l'erreur 'undefined'
+      
       relations: { 
         achat: true, 
         event: true 

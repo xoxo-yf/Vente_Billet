@@ -3,7 +3,7 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 
-// Alignement sur vos vrais dossiers en anglais
+
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 
@@ -24,7 +24,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       envFilePath: '.env',
     }),
 
-    // 2. Vos modules
+    // 2.  modules
     AuthModule,
     UsersModule,
     EventsModule,
@@ -47,17 +47,17 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         port: configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USER'),
        
-        password: 'postgres', // Mettez ici le mot de passe exact de votre pgAdmin
+        password: 'postgres', 
 
         database: configService.get<string>('DATABASE_NAME'),
         autoLoadEntities: true,
-        synchronize: true, // Crée les tables automatiquement
+        synchronize: true, 
       }),
     }),
         
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
-      exclude: ['/api/(*.)'], // Empêche de bloquer vos futures routes d'API
+      exclude: ['/api/(*.)'], 
     }),
         
     TicketsModule,

@@ -17,7 +17,7 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  // Matches GET /api/events/search?ville=Paris&date=2026-09-30
+  
   @Get('search')
   search(@Query('ville') ville?: string, @Query('date') date?: string) {
     return this.eventsService.search(ville, date);
