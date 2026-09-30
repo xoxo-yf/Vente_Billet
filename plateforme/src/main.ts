@@ -22,6 +22,6 @@ async function bootstrap() {
   }));
 
   await app.listen(process.env.PORT || 3000,'0.0.0.0');
-  console.log(`🚀 L'API est lancée avec succès sur : http://localhost:3000`);
+  console.log(` L'API est lancée avec succès sur : http://localhost:3000`);
 }
 bootstrap();

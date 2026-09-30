@@ -316,10 +316,10 @@
 
                 if (!reponse.ok) throw new Error("Le changement de statut a échoué.");
 
-                alert(`🎯 Achat #${achatId} mis à jour avec succès !`);
+                alert(` Achat #${achatId} mis à jour avec succès !`);
                 chargerAchats();
             } catch (error) {
-                alert(`❌ Erreur : ${error.message}`);
+                alert(` Erreur : ${error.message}`);
             }
         }
 
@@ -330,8 +330,7 @@ document.getElementById('btn-logout').addEventListener('click', () => {
     // 1. Supprime le jeton JWT de la mémoire du navigateur
     localStorage.removeItem('jeton_acces');
     
-    // 2. Message d'information optionnel
-    alert("👋 Déconnexion réussie. À bientôt !");
+  
     
     // 3. Redirection immédiate vers la page de connexion
     window.location.href = 'index.html';

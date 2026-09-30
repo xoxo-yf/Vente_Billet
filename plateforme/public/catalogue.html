@@ -415,7 +415,7 @@ document.getElementById('modal-btn-confirm').addEventListener('click', async () 
         if (!reponseAchat.ok) throw new Error(resultatAchat.message || "L'achat a échoué.");
 
         // 3. Message d'information à l'utilisateur
-        alert(` Achat enregistré en attente !\nMontant total : ${resultatAchat.montantTotal.toFixed(2)} Ar.\n\n⚠️ Votre statut restera "Vérification en cours" tant que l'organisateur n'aura pas validé votre référence (${referenceSaisie}) depuis son espace Admin.`);
+        alert(` Achat enregistré en attente !\nMontant total : ${resultatAchat.montantTotal.toFixed(2)} Ar.\n\n Votre statut restera "Vérification en cours" tant que l'organisateur n'aura pas validé votre référence (${referenceSaisie}) depuis son espace Admin.`);
 
         // Rafraîchissement automatique de la grille pour décrémenter le stock de places
         const ville = document.getElementById('search-ville').value;

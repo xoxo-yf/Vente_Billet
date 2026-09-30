@@ -99,7 +99,7 @@ if (formLogin) {
             }
 
             const donneesSession = decoderJWT(token);
-            const emailMinuscule = email.toLowerCase();
+            const emailMinuscule = email.toLowerCase().trim();
             
             // PASSERELLE DE REDIRECTION INFAILLIBLE (.admin)
             if ((donneesSession && donneesSession.role === 'admin') || emailMinuscule.endsWith('.admin')) {
