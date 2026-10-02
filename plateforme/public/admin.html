@@ -234,117 +234,151 @@ tbody tr:hover { background-color: #1a2432; }
         </div>
     </div>
 
-    <script>
-        async function chargerAchats() {
-            const zone = document.getElementById('admin-zone');
-            const statsBar = document.getElementById('stats-bar');
-            try {
-                const reponse = await fetch('http://localhost:3000/api/tickets/admin/liste');
-                const achats = await reponse.json();
-
-                if (achats.length === 0) {
-                    statsBar.style.display = 'none';
-                    zone.innerHTML = '<p class="empty-state">Aucun achat enregistré sur la plateforme.</p>';
-                    return;
-                }
-
-                let nbWait = 0, nbOk = 0, nbKo = 0;
-
-                let htmlTable = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Prix Unitaire</th>
-                                <th>Événement</th>
-                                <th>Places</th>
-                                <th>Montant</th>
-                                <th>Référence Mobile Money</th>
-                                <th>Statut de Validation</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-
-                achats.forEach(achat => {
-                    const premierBillet = achat.billets && achat.billets[0];
-                    const titreEvenement = premierBillet ? premierBillet.event.titre : 'Événement inconnu';
-                    const reference = premierBillet && premierBillet.modePaiement ? premierBillet.modePaiement : 'Non renseignée';
-                    const statutCourant = premierBillet ? premierBillet.statut : 'en_attente';
-                    const prixUnitaire = premierBillet ? premierBillet.prix : 0;
-                    let badgeClass = 'badge-wait';
-                    let labelStatut = 'En attente de vérification';
-                    if (statutCourant === 'paye') { badgeClass = 'badge-success'; labelStatut = 'Validé (Payé)'; nbOk++; }
-                    else if (statutCourant === 'refuse') { badgeClass = 'badge-danger'; labelStatut = 'Refusé / Annulé'; nbKo++; }
-                    else { nbWait++; }
-
-                    const boutonsVisibles = statutCourant === 'en_attente'
-                        ? `<button class="btn-action btn-accept" onclick="modifierStatut(${achat.id}, 'valider', '${reference.replace(/'/g, "\\'")}')">Accepter</button>
-                           <button class="btn-action btn-reject" onclick="modifierStatut(${achat.id}, 'refuser')">Refuser</button>`
-                        : `<span class="no-action">Aucune action requise</span>`;
-
-                    htmlTable += `
-                        <tr>
-                            <td class="id-cell">${prixUnitaire.toFixed(2)}</td>
-                            <td><strong>${titreEvenement}</strong></td>
-                            <td>${achat.billets.length} billet(s)</td>
-                            <td style="font-weight:700;">${achat.montantTotal.toFixed(2)} Ar</td>
-                            <td><span class="ref-code">${reference}</span></td>
-                            <td><span class="badge ${badgeClass}">${labelStatut}</span></td>
-                            <td>${boutonsVisibles}</td>
-                        </tr>
-                    `;
-                });
-
-                htmlTable += '</tbody></table>';
-                zone.innerHTML = htmlTable;
-
-                document.getElementById('stat-wait').textContent = nbWait;
-                document.getElementById('stat-ok').textContent = nbOk;
-                document.getElementById('stat-ko').textContent = nbKo;
-                statsBar.style.display = 'grid';
-
-            } catch (error) {
-                statsBar.style.display = 'none';
-                zone.innerHTML = `<p class="error-state">Erreur : ${error.message}</p>`;
-            }
-        }
-
-        async function modifierStatut(achatId, action, referenceText = '') {
-            const url = action === 'valider' ? 'http://localhost:3000/api/tickets/payer' : 'http://localhost:3000/api/tickets/refuser';
-            const bodyData = action === 'valider'
-                ? { achatId: achatId, modePaiement: referenceText }
-                : { achatId: achatId };
-
-            try {
-                const reponse = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bodyData)
-                });
-
-                if (!reponse.ok) throw new Error("Le changement de statut a échoué.");
-
-                alert(` Achat #${achatId} mis à jour avec succès !`);
-                chargerAchats();
-            } catch (error) {
-                alert(` Erreur : ${error.message}`);
-            }
-        }
-
-        chargerAchats();
+<script>
+    // Protection stricte de l'espace d'administration
+    (function verifierSecuriteAdmin() {
+        const token = localStorage.getItem('jeton_acces');
         
-        // Écouteur sur le bouton de déconnexion
-document.getElementById('btn-logout').addEventListener('click', () => {
-    // 1. Supprime le jeton JWT de la mémoire du navigateur
-    localStorage.removeItem('jeton_acces');
-    
-  
-    
-    // 3. Redirection immédiate vers la page de connexion
-    window.location.href = 'index.html';
-});
+        // 1. S'il n'y a aucun jeton, redirection immédiate vers la page de connexion
+        if (!token) {
+            window.location.replace('index.html');
+            return;
+        }
 
-    </script>
+        try {
+            // 2. Décodage et vérification de l'identité du jeton
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const payload = JSON.parse(window.atob(base64));
+
+            // 3. RÈGLE CRITIQUE : Si ce n'est pas l'adresse du boss unique, on l'expulse
+            if (!payload.email || payload.email.toLowerCase() !== 'boss@billeterie.admin') {
+                alert(" Accès refusé. Cette zone est réservée à l'administrateur unique.");
+                localStorage.removeItem('jeton_acces'); // Supprime le jeton invalide
+                window.location.replace('index.html');
+            }
+        } catch (e) {
+            localStorage.removeItem('jeton_acces');
+            window.location.replace('index.html');
+        }
+    })();
+
+    async function chargerAchats() {
+        const zone = document.getElementById('admin-zone');
+        const statsBar = document.getElementById('stats-bar');
+        try {
+            // CORRIGÉ : Utilisation de window.location.hostname pour la compatibilité réseau local et mobile
+            const reponse = await fetch(`http://${window.location.hostname}:3000/api/tickets/admin/liste`);
+            const achats = await reponse.json();
+
+            if (achats.length === 0) {
+                statsBar.style.display = 'none';
+                zone.innerHTML = '<p class="empty-state">Aucun achat enregistré sur la plateforme.</p>';
+                return;
+            }
+
+            let nbWait = 0, nbOk = 0, nbKo = 0;
+
+            let htmlTable = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prix Unitaire</th>
+                            <th>Événement</th>
+                            <th>Places</th>
+                            <th>Montant</th>
+                            <th>Référence Mobile Money</th>
+                            <th>Statut de Validation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            achats.forEach(achat => {
+                const premierBillet = achat.billets && achat.billets[0];
+                const titreEvenement = premierBillet ? premierBillet.event.titre : 'Événement inconnu';
+                const reference = premierBillet && premierBillet.modePaiement ? premierBillet.modePaiement : 'Non renseignée';
+                const statutCourant = premierBillet ? premierBillet.statut : 'en_attente';
+                const prixUnitaire = premierBillet ? premierBillet.prix : 0;
+                
+                let badgeClass = 'badge-wait';
+                let labelStatut = 'En attente de vérification';
+                if (statutCourant === 'paye') { badgeClass = 'badge-success'; labelStatut = 'Validé (Payé)'; nbOk++; }
+                else if (statutCourant === 'refuse') { badgeClass = 'badge-danger'; labelStatut = 'Refusé / Annulé'; nbKo++; }
+                else { nbWait++; }
+
+                const boutonsVisibles = statutCourant === 'en_attente'
+                    ? `<button class="btn-action btn-accept" onclick="modifierStatut(${achat.id}, 'valider', '${reference.replace(/'/g, "\\'")}')">Accepter</button>
+                       <button class="btn-action btn-reject" onclick="modifierStatut(${achat.id}, 'refuser')">Refuser</button>`
+                    : `<span class="no-action">Aucune action requise</span>`;
+
+                htmlTable += `
+                    <tr>
+                        <!-- CORRIGÉ : Prix unitaire arrondi en Ariary (Ar) sans décimales -->
+                        <td class="id-cell">${Math.round(prixUnitaire)} Ar</td>
+                        <td><strong>${titreEvenement}</strong></td>
+                        <td>${achat.billets.length} billet(s)</td>
+                        <!-- CORRIGÉ : Montant total arrondi en Ariary (Ar) sans décimales -->
+                        <td style="font-weight:700;">${Math.round(achat.montantTotal)} Ar</td>
+                        <td><span class="ref-code">${reference}</span></td>
+                        <td><span class="badge ${badgeClass}">${labelStatut}</span></td>
+                        <td>${boutonsVisibles}</td>
+                    </tr>
+                `;
+            });
+
+            htmlTable += '</tbody></table>';
+            zone.innerHTML = htmlTable;
+
+            document.getElementById('stat-wait').textContent = nbWait;
+            document.getElementById('stat-ok').textContent = nbOk;
+            document.getElementById('stat-ko').textContent = nbKo;
+            statsBar.style.display = 'grid';
+
+        } catch (error) {
+            statsBar.style.display = 'none';
+            zone.innerHTML = `<p class="error-state">Erreur : ${error.message}</p>`;
+        }
+    }
+
+    async function modifierStatut(achatId, action, referenceText = '') {
+        // CORRIGÉ : Utilisation de window.location.hostname pour l'envoi du changement de statut
+        const url = action === 'valider' 
+            ? `http://${window.location.hostname}:3000/api/tickets/payer` 
+            : `http://${window.location.hostname}:3000/api/tickets/refuser`;
+            
+        const bodyData = action === 'valider'
+            ? { achatId: achatId, modePaiement: referenceText }
+            : { achatId: achatId };
+
+        try {
+            const reponse = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData)
+            });
+
+            if (!reponse.ok) throw new Error("Le changement de statut a échoué.");
+
+            alert(` Achat #${achatId} mis à jour avec succès !`);
+            chargerAchats();
+        } catch (error) {
+            alert(` Erreur : ${error.message}`);
+        }
+    }
+
+    // Chargement initial des achats
+    chargerAchats();
+    
+    // Écouteur sur le bouton de déconnexion
+    document.getElementById('btn-logout').addEventListener('click', () => {
+        // 1. Supprime le jeton JWT de la mémoire du navigateur
+        localStorage.removeItem('jeton_acces');
+        // 2. Redirection immédiate vers la page de connexion
+        window.location.href = 'index.html';
+    });
+</script>
+
 </body>
 </html>

@@ -104,7 +104,7 @@
         const token = localStorage.getItem('jeton_acces'); 
 
         if (!token) {
-            zone.innerHTML = '<p class="no-data" style="color: #f0a49b;">🔒 Authentification requise. Redirection...</p>';
+            zone.innerHTML = '<p class="no-data" style="color: #f0a49b;">Authentification Redirection requise. ...</p>';
             setTimeout(() => { window.location.href = 'index.html'; }, 2500);
             return;
         }
