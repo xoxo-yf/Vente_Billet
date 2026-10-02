@@ -7,24 +7,25 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap');
 
-        :root {
-            --ink: #3d3a3f;
-            --ink-soft: #7a7480;
-            --ink-faint: #a79fac;
-            --paper: #f7f3ef;
-            --surface: #fffdfb;
-            --line: #ece3dd;
-            --accent: #b79fd1;
-            --accent-dark: #9c81ba;
-            --accent-tint: #f2ecf6;
-            --success-tint: #eaf1e8;
-            --success-text: #4d6a4a;
-            --error-tint: #fbeeec;
-            --error-text: #a25a51;
-            --radius: 16px;
-            --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
-        }
+       :root {
+        color-scheme: dark;
+        --ink: #e8e4ec;
+        --ink-soft: #a9a2b0;
+        --ink-faint: #6f6877;
+        --paper: #0f0d12;
+        --surface: #18151d;
+        --line: #2d2834;
+        --accent: #b79fd1;
+        --accent-dark: #cdb8e3;
+        --accent-tint: rgba(183, 159, 209, 0.18);
+        --success-tint: rgba(110, 160, 105, 0.18);
+        --success-text: #a9d4a4;
+        --error-tint: rgba(200, 100, 90, 0.18);
+        --error-text: #f0a69d;
+        --radius: 16px;
+        --font-sans: 'IBM Plex Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        --font-title: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+}
 
         * { box-sizing: border-box; }
 
@@ -140,6 +141,12 @@
         @media (max-width: 480px) {
             .form-box { padding: 32px 24px; }
             .row { flex-direction: column; gap: 0; }
+
+
+            .form-box { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+button { color: #1a1420; }
+button:hover { background-color: var(--accent-dark); }
+input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
         }
     </style>
 </head>

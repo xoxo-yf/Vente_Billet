@@ -9,24 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f4c5c;
-            --primary-dark: #0a3540;
-            --primary-light: #e8f2f4;
-            --accent: #1789a8;
-            --success: #16a34a;
-            --success-bg: #dcfce7;
-            --success-text: #14532d;
-            --warning-bg: #fef3c7;
-            --warning-text: #78350f;
-            --danger: #dc2626;
-            --danger-bg: #fee2e2;
-            --danger-text: #7f1d1d;
-            --border: #e2e8f0;
-            --text-main: #1a2430;
-            --text-muted: #64748b;
-            --bg: #f1f5f9;
-            --card-bg: #ffffff;
-        }
+        color-scheme: dark;
+        --primary: #0f4c5c;
+        --primary-dark: #0a3540;
+        --primary-light: #12303a;
+        --accent: #38bdf8;
+        --success: #16a34a;
+        --success-bg: rgba(22, 163, 74, 0.18);
+        --success-text: #86efac;
+        --warning-bg: rgba(245, 158, 11, 0.18);
+        --warning-text: #fcd34d;
+        --danger: #dc2626;
+        --danger-bg: rgba(220, 38, 38, 0.2);
+        --danger-text: #fca5a5;
+        --border: #2a3646;
+        --text-main: #e5e9f0;
+        --text-muted: #94a3b8;
+        --bg: #0b1118;
+        --card-bg: #141c26;
+    }
 
         * { box-sizing: border-box; }
 
@@ -174,6 +175,14 @@
         .loading-state { color: var(--text-muted); }
         .empty-state { color: #94a3b8; }
         .error-state { color: var(--danger); font-weight: 600; }
+
+
+            .stat-value.wait { color: #fbbf24; }
+tbody tr:hover { background-color: #1a2432; }
+.ref-code { background: #1f2a38; color: #cbd5e1; }
+.no-action, .empty-state { color: #64748b; }
+.stat-card, .table-wrap { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+.header { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5); }
     </style>
 </head>
 <body>
